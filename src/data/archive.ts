@@ -79,6 +79,8 @@ export type ArchiveNode = {
   classification: Classification;
   sourceLanguage: Locale;
   edges: string[];
+  /** Nodes that carry their own artwork on the detail page. */
+  art?: "eye";
   i18n: Partial<Record<Locale, ArchiveText>>;
 };
 
@@ -88,6 +90,7 @@ export const ARCHIVE: ArchiveNode[] = [
     classification: "CONSPIRACY",
     sourceLanguage: "en",
     edges: ["anunnaki", "naga", "illuminati", "new-world-order", "ufo", "dragon-mythology"],
+    art: "eye",
     i18n: {
       en: { title: "Reptilian", summary: "The claim that reptile-like beings live among humans in disguise. Popularised in the 1990s; no evidence supports it." },
       ko: { title: "렙틸리언", summary: "파충류형 존재가 인간으로 위장해 섞여 산다는 주장. 1990년대에 확산되었으며 근거는 확인되지 않았다." },

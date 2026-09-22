@@ -11,8 +11,9 @@ import {
 } from "@/lib/i18n";
 import { getDict } from "@/data/dict";
 import { NODES } from "@/data/nodes";
+import ReptilianEye from "./ReptilianEye";
 
-type Stage = "boot" | "language" | "identity";
+type Stage = "boot" | "select";
 
 const SPECIES = ["human", "reptilian", "other", "dontKnow"] as const;
 export type Species = (typeof SPECIES)[number];
@@ -24,12 +25,20 @@ const BOOT_LINES = [
   "CARRIER ............. UNKNOWN ORIGIN",
 ];
 
+const NODE_BY_LOCALE: Record<Locale, string> = {
+  ko: "seoul",
+  ja: "tokyo",
+  es: "mexico-city",
+  pt: "sao-paulo",
+  th: "bangkok",
+  en: "london",
+};
+
 export default function Entry() {
   const router = useRouter();
   const [stage, setStage] = useState<Stage>("boot");
   const [progress, setProgress] = useState(0);
   const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
-  const [picking, setPicking] = useState(false);
   const [species, setSpecies] = useState<Species | null>(null);
   const detected = useRef(false);
 
@@ -48,58 +57,44 @@ export default function Entry() {
   useEffect(() => {
     if (stage !== "boot") return;
     const id = window.setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) return 100;
-        return Math.min(100, p + 3 + Math.random() * 9);
-      });
+      setProgress((p) => (p >= 100 ? 100 : Math.min(100, p + 3 + Math.random() * 9)));
     }, 70);
     return () => window.clearInterval(id);
   }, [stage]);
 
   useEffect(() => {
     if (stage === "boot" && progress >= 100) {
-      const id = window.setTimeout(() => setStage("language"), 420);
+      const id = window.setTimeout(() => setStage("select"), 420);
       return () => window.clearTimeout(id);
     }
   }, [stage, progress]);
 
   const dict = useMemo(() => getDict(locale), [locale]);
-  const nodeGuess = useMemo(() => {
-    const byLocale: Partial<Record<Locale, string>> = {
-      ko: "seoul",
-      ja: "tokyo",
-      es: "mexico-city",
-      pt: "sao-paulo",
-      th: "bangkok",
-      en: "london",
-    };
-    return NODES.find((n) => n.id === byLocale[locale]) ?? NODES[0];
-  }, [locale]);
-
+  const node = useMemo(
+    () => NODES.find((n) => n.id === NODE_BY_LOCALE[locale]) ?? NODES[0],
+    [locale]
+  );
   const unknownSignals = useMemo(
     () => NODES.reduce((sum, n) => sum + n.signals, 0),
     []
   );
 
-  const enter = useCallback(
-    (chosen: Species) => {
-      window.localStorage.setItem("reptilink:locale", locale);
-      window.localStorage.setItem("reptilink:species", chosen);
-      router.push(`/${locale}`);
-    },
-    [locale, router]
-  );
+  const enter = useCallback(() => {
+    if (!species) return;
+    window.localStorage.setItem("reptilink:locale", locale);
+    window.localStorage.setItem("reptilink:species", species);
+    router.push(`/${locale}`);
+  }, [locale, species, router]);
 
+  const recognised = species === "reptilian";
   const bars = Math.round((Math.min(progress, 100) / 100) * 18);
 
-  return (
-    <main className="entry grid-lines">
-      <div className="entry__inner">
-        {stage === "boot" && (
+  if (stage === "boot") {
+    return (
+      <main className="entry grid-lines">
+        <div className="entry__inner">
           <section aria-live="polite">
-            <pre className="entry__boot flicker">
-              {BOOT_LINES.join("\n")}
-            </pre>
+            <pre className="entry__boot flicker">{BOOT_LINES.join("\n")}</pre>
             <p className="mono-label" style={{ marginTop: 26 }}>
               {dict.connecting}
             </p>
@@ -109,122 +104,123 @@ export default function Entry() {
               <span className="dim">{Math.min(100, Math.floor(progress))}%</span>
             </p>
           </section>
-        )}
+        </div>
+        <Foot tagline={dict.taglineAlt} />
+      </main>
+    );
+  }
 
-        {stage === "language" && (
+  return (
+    <main className="entry entry--wide grid-lines">
+      <div className="gate">
+        <div className="gate__art">
+          <ReptilianEye awake={species !== null} recognised={recognised} />
+
+          <p className="gate__status" aria-live="polite">
+            <span className={recognised ? "acid" : species ? "toxic" : "dim"}>
+              ●
+            </span>
+            <span className="mono-label">
+              {recognised
+                ? "ENTITY RECOGNISED"
+                : species
+                  ? "CONTACT ESTABLISHED"
+                  : "OBSERVATION · MUTUAL"}
+            </span>
+          </p>
+
+          <p className="display--sm rgb gate__line" data-text={dict.humansWereNotFirst}>
+            {dict.humansWereNotFirst}
+          </p>
+
+          <p
+            key={recognised ? "recognised" : "watching"}
+            className={`gate__whisper${species ? " gate__whisper--now" : ""}`}
+          >
+            {recognised ? dict.recognised : dict.lookingBack}
+          </p>
+          <dl className="gate__readout">
+            <div>
+              <dt className="mono-label">NODE</dt>
+              <dd>
+                {node.name} / {node.country}
+              </dd>
+            </div>
+            <div>
+              <dt className="mono-label">UNKNOWN SIGNALS</dt>
+              <dd className="toxic">{unknownSignals.toLocaleString("en-US")}</dd>
+            </div>
+            <div>
+              <dt className="mono-label">TRANSLATION NETWORK</dt>
+              <dd className="toxic">ONLINE</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="gate__form">
+          {/* Language and identity are one decision, taken on one screen. */}
           <section>
             <p className="mono-label">{dict.languageDetected}</p>
-            <h1 className="display" style={{ marginTop: 8 }}>
-              {LOCALE_META[locale].native}
-            </h1>
-
-            <dl className="entry__readout">
-              <div>
-                <dt className="mono-label">NODE</dt>
-                <dd>
-                  {nodeGuess.name} / {nodeGuess.country}
-                </dd>
-              </div>
-              <div>
-                <dt className="mono-label">UNKNOWN SIGNALS</dt>
-                <dd className="toxic">{unknownSignals.toLocaleString("en-US")}</dd>
-              </div>
-              <div>
-                <dt className="mono-label">TRANSLATION NETWORK</dt>
-                <dd className="toxic">ONLINE</dd>
-              </div>
-            </dl>
-
-            {picking ? (
-              <ul className="entry__langs">
-                {LOCALES.map((l) => (
-                  <li key={l}>
-                    <button
-                      className="btn"
-                      onClick={() => {
-                        setLocale(l);
-                        setPicking(false);
-                      }}
-                      aria-pressed={l === locale}
-                      style={
-                        l === locale
-                          ? { borderColor: "var(--toxic)", color: "var(--toxic)" }
-                          : undefined
-                      }
-                    >
-                      {LOCALE_META[l].code} · {LOCALE_META[l].native}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="entry__actions">
-                <button className="btn" onClick={() => setStage("identity")}>
-                  {dict.continueAs} →
-                </button>
-                <button
-                  className="btn btn--ghost"
-                  onClick={() => setPicking(true)}
-                >
-                  {dict.changeLanguage}
-                </button>
-              </div>
-            )}
-          </section>
-        )}
-
-        {stage === "identity" && (
-          <section>
-            <p className="display--sm rgb" data-text={dict.humansWereNotFirst}>
-              {dict.humansWereNotFirst}
-            </p>
-
-            <h2 className="mono-label" style={{ marginTop: 34 }}>
-              {dict.whatAreYou}
-            </h2>
-
-            <ul className="entry__species">
-              {SPECIES.map((s) => (
-                <li key={s}>
+            <h1 className="gate__lang">{LOCALE_META[locale].native}</h1>
+            <ul className="gate__options">
+              {LOCALES.map((l) => (
+                <li key={l}>
                   <button
-                    className="btn"
-                    onClick={() => setSpecies(s)}
-                    aria-pressed={species === s}
-                    style={
-                      species === s
-                        ? { borderColor: "var(--toxic)", color: "var(--toxic)" }
-                        : undefined
-                    }
+                    className={`opt${l === locale ? " opt--on" : ""}`}
+                    onClick={() => setLocale(l)}
+                    aria-pressed={l === locale}
+                    lang={l}
                   >
-                    [ {dict[s]} ]
+                    <span className="opt__code">{LOCALE_META[l].code}</span>
+                    {LOCALE_META[l].native}
                   </button>
                 </li>
               ))}
             </ul>
-
-            <p className="entry__note dim">{dict.identityNote}</p>
-
-            <button
-              className="btn"
-              disabled={!species}
-              onClick={() => species && enter(species)}
-              style={{
-                marginTop: 18,
-                opacity: species ? 1 : 0.35,
-                borderColor: species ? "var(--toxic)" : undefined,
-                color: species ? "var(--toxic)" : undefined,
-              }}
-            >
-              {dict.enter} <span className="caret" />
-            </button>
           </section>
-        )}
+
+          <section style={{ marginTop: 34 }}>
+            <p className="mono-label">{dict.whatAreYou}</p>
+            <ul className="gate__options" style={{ marginTop: 14 }}>
+              {SPECIES.map((s) => (
+                <li key={s}>
+                  <button
+                    className={`opt${species === s ? " opt--on" : ""}`}
+                    onClick={() => setSpecies(s)}
+                    aria-pressed={species === s}
+                  >
+                    <span className="opt__code">
+                      {species === s ? "◉" : "○"}
+                    </span>
+                    {dict[s]}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <p className="entry__note dim">{dict.identityNote}</p>
+          </section>
+
+          <button
+            className={`btn gate__enter${species ? " gate__enter--ready" : ""}`}
+            disabled={!species}
+            onClick={enter}
+          >
+            {dict.enter}
+            {species && <span className="caret" />}
+          </button>
+        </div>
       </div>
 
-      <footer className="entry__foot">
-        <span className="mono-label">REPTILINK</span>
-        <span className="mono-label">{dict.taglineAlt}</span>
-      </footer>
+      <Foot tagline={dict.taglineAlt} />
     </main>
+  );
+}
+
+function Foot({ tagline }: { tagline: string }) {
+  return (
+    <footer className="entry__foot">
+      <span className="mono-label">REPTILINK</span>
+      <span className="mono-label">{tagline}</span>
+    </footer>
   );
 }

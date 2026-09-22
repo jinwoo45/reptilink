@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArchiveGraph from "@/components/ArchiveGraph";
+import ReptilianEye from "@/components/ReptilianEye";
 import SignalCard from "@/components/SignalCard";
 import { getDict } from "@/data/dict";
 import {
@@ -133,6 +134,11 @@ export default async function ArchiveNodePage({
         </div>
 
         <aside>
+          {node.art === "eye" && (
+            <div className="panel pad" style={{ marginBottom: 22 }}>
+              <ReptilianEye className="eye--sm" />
+            </div>
+          )}
           <div className="meta">
             <div className="meta__row">
               <p className="mono-label">{dict.classification}</p>

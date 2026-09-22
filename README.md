@@ -13,7 +13,7 @@ language, with the original still underneath, one click away, never overwritten.
 
 | Spec section | Route | State |
 |---|---|---|
-| §6 Entry Experience | `/` | Boot sequence, browser language detection, ENTITY IDENTITY |
+| §6 Entry Experience | `/` | Boot sequence, then one screen: language and ENTITY IDENTITY, watched by the eye |
 | §10 Global Signal Feed | `/[locale]/signal` | One feed, twelve signals, six languages |
 | §11 View Original Signal | in every signal card | Original / translation side by side |
 | §12 REPTI RADAR | `/[locale]/radar` | City-level nodes only, no individual positions |
@@ -40,6 +40,14 @@ backend (§30) is out of scope for a single static deployment, so:
   sent anywhere.
 - Private Channel, Case, Encounter and cross-lingual search (§19–21, §32) are
   V0.2/V0.3 and are not here.
+
+## The eye
+
+`src/components/ReptilianEye.tsx` is the network's only figurative image, drawn
+as vector so it stays sharp and weighs nothing. It follows the pointer, drifts
+in saccades when nobody moves, blinks, and a nictitating membrane crosses it now
+and then. Declaring yourself REPTILIAN dilates the pupil and the readout changes
+to ENTITY RECOGNISED. All of it stands down under `prefers-reduced-motion`.
 
 ## Content honesty
 

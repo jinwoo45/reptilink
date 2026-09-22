@@ -19,6 +19,8 @@ export type Dict = {
   dontKnow: string;
   enter: string;
   humansWereNotFirst: string;
+  lookingBack: string;
+  recognised: string;
   globalFeed: string;
   feedIntro: string;
   translatedFrom: string;
@@ -90,6 +92,8 @@ const en: Dict = {
   dontKnow: "I DON'T KNOW",
   enter: "ENTER THE NETWORK",
   humansWereNotFirst: "HUMANS WERE NOT THE FIRST.",
+  lookingBack: "Whatever this is, it is looking back at you.",
+  recognised: "It knows what you are. It was waiting for you to say it.",
   globalFeed: "GLOBAL SIGNAL FEED",
   feedIntro:
     "Every SIGNAL on this network was written in someone else's language. You are reading them in yours.",
@@ -168,6 +172,8 @@ const ko: Dict = {
   dontKnow: "모르겠다",
   enter: "네트워크 진입",
   humansWereNotFirst: "인류가 처음은 아니었다.",
+  lookingBack: "이것이 무엇이든, 당신을 마주 보고 있다.",
+  recognised: "그것은 당신이 무엇인지 알고 있었다. 당신이 말하기를 기다렸을 뿐이다.",
   feedIntro:
     "이 네트워크의 모든 SIGNAL은 다른 언어로 쓰였습니다. 당신은 그것을 당신의 언어로 읽고 있습니다.",
   translatedFrom: "원문 언어",
@@ -237,6 +243,8 @@ const ja: Dict = {
   dontKnow: "わからない",
   enter: "ネットワークへ",
   humansWereNotFirst: "人類が最初ではなかった。",
+  lookingBack: "これが何であれ、こちらを見返している。",
+  recognised: "それはあなたが何かを知っていた。あなたが口にするのを待っていただけだ。",
   feedIntro:
     "このネットワークのすべての SIGNAL は別の言語で書かれました。あなたはそれを自分の言語で読んでいます。",
   translatedFrom: "原文言語",
@@ -306,6 +314,8 @@ const es: Dict = {
   dontKnow: "NO LO SÉ",
   enter: "ENTRAR A LA RED",
   humansWereNotFirst: "LOS HUMANOS NO FUERON LOS PRIMEROS.",
+  lookingBack: "Sea lo que sea, te está devolviendo la mirada.",
+  recognised: "Sabe lo que eres. Solo esperaba a que lo dijeras.",
   feedIntro:
     "Cada SIGNAL de esta red se escribió en otro idioma. Tú los estás leyendo en el tuyo.",
   translatedFrom: "TRADUCIDO DEL",
@@ -376,6 +386,8 @@ const pt: Dict = {
   dontKnow: "NÃO SEI",
   enter: "ENTRAR NA REDE",
   humansWereNotFirst: "OS HUMANOS NÃO FORAM OS PRIMEIROS.",
+  lookingBack: "Seja lá o que for, está olhando de volta para você.",
+  recognised: "Ele sabe o que você é. Só esperava que você dissesse.",
   feedIntro:
     "Cada SIGNAL desta rede foi escrito em outro idioma. Você está lendo no seu.",
   translatedFrom: "TRADUZIDO DO",
@@ -446,6 +458,8 @@ const th: Dict = {
   dontKnow: "ไม่รู้",
   enter: "เข้าสู่เครือข่าย",
   humansWereNotFirst: "มนุษย์ไม่ใช่สิ่งแรก",
+  lookingBack: "ไม่ว่าสิ่งนี้คืออะไร มันกำลังมองกลับมาที่คุณ",
+  recognised: "มันรู้ว่าคุณเป็นอะไร มันแค่รอให้คุณพูดออกมา",
   feedIntro:
     "ทุก SIGNAL ในเครือข่ายนี้ถูกเขียนด้วยภาษาอื่น คุณกำลังอ่านมันในภาษาของคุณ",
   translatedFrom: "แปลจาก",
