@@ -11,6 +11,7 @@ import {
 } from "@/lib/i18n";
 import { getDict } from "@/data/dict";
 import { NODES } from "@/data/nodes";
+import { ARCHIVE } from "@/data/archive";
 import ReptilianEye from "./ReptilianEye";
 
 type Stage = "boot" | "select";
@@ -73,10 +74,6 @@ export default function Entry() {
   const node = useMemo(
     () => NODES.find((n) => n.id === NODE_BY_LOCALE[locale]) ?? NODES[0],
     [locale]
-  );
-  const unknownSignals = useMemo(
-    () => NODES.reduce((sum, n) => sum + n.signals, 0),
-    []
   );
 
   const enter = useCallback(() => {
@@ -147,8 +144,8 @@ export default function Entry() {
               </dd>
             </div>
             <div>
-              <dt className="mono-label">UNKNOWN SIGNALS</dt>
-              <dd className="toxic">{unknownSignals.toLocaleString("en-US")}</dd>
+              <dt className="mono-label">ARCHIVE</dt>
+              <dd className="toxic">{ARCHIVE.length}</dd>
             </div>
             <div>
               <dt className="mono-label">TRANSLATION NETWORK</dt>

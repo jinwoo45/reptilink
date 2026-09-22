@@ -68,12 +68,21 @@ export type Dict = {
   audioOn: string;
   audioOff: string;
   signals: string;
-  relay: string;
-  watch: string;
   localSignals: string;
   activeLanguages: string;
-  entityActivity: string;
   all: string;
+  sampleNotice: string;
+  countedNotice: string;
+  transmissions: string;
+  archiveNodes: string;
+  channel: string;
+  channelIntro: string;
+  channelNotice: string;
+  channelPlaceholder: string;
+  send: string;
+  receiving: string;
+  you: string;
+  clearChannel: string;
 };
 
 const en: Dict = {
@@ -147,12 +156,25 @@ const en: Dict = {
   audioOn: "ENABLE AUDIO",
   audioOff: "DISABLE AUDIO",
   signals: "SIGNAL",
-  relay: "RELAY",
-  watch: "WATCH",
   localSignals: "LOCAL SIGNALS",
   activeLanguages: "ACTIVE LANGUAGES",
-  entityActivity: "ENTITY ACTIVITY",
   all: "GLOBAL",
+  sampleNotice:
+    "These transmissions were written for this build, each one in six languages. They are specimens, not traffic — REPTILINK has no users yet, and no number on this site is estimated or invented.",
+  countedNotice:
+    "Counted from the transmissions that exist in this build. Nothing here is a projection.",
+  transmissions: "TRANSMISSIONS",
+  archiveNodes: "ARCHIVE NODES",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "Something answers on this frequency. It does not speak your language, so the channel translates — and keeps the original, as it does everywhere else.",
+  channelNotice:
+    "This entity is scripted, not a language model. It matches what you write against a fixed set of replies. Nothing you type leaves your browser.",
+  channelPlaceholder: "Write in your own language.",
+  send: "SEND",
+  receiving: "RECEIVING",
+  you: "YOU",
+  clearChannel: "CLOSE CHANNEL",
 };
 
 const ko: Dict = {
@@ -222,8 +244,23 @@ const ko: Dict = {
   audioOn: "오디오 켜기",
   audioOff: "오디오 끄기",
   localSignals: "지역 신호",
+  sampleNotice:
+    "이 전송들은 이 빌드를 위해 작성되었고, 각각 6개 언어로 되어 있습니다. 트래픽이 아니라 표본입니다 — REPTILINK에는 아직 사용자가 없고, 이 사이트의 어떤 숫자도 추정하거나 지어내지 않았습니다.",
+  countedNotice:
+    "이 빌드에 실제로 존재하는 전송을 센 값입니다. 추정치는 하나도 없습니다.",
+  transmissions: "전송",
+  archiveNodes: "아카이브 노드",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "이 주파수에서 무언가 응답합니다. 그것은 당신의 언어를 쓰지 않으므로 채널이 번역합니다 — 그리고 다른 곳과 마찬가지로 원문을 남겨둡니다.",
+  channelNotice:
+    "이 엔티티는 언어 모델이 아니라 스크립트입니다. 당신이 쓴 말을 정해진 응답 집합과 대조할 뿐입니다. 입력한 내용은 브라우저 밖으로 나가지 않습니다.",
+  channelPlaceholder: "당신의 언어로 쓰세요.",
+  send: "전송",
+  receiving: "수신 중",
+  you: "당신",
+  clearChannel: "채널 닫기",
   activeLanguages: "활성 언어",
-  entityActivity: "엔티티 활동",
 };
 
 const ja: Dict = {
@@ -293,8 +330,23 @@ const ja: Dict = {
   audioOn: "音声をオン",
   audioOff: "音声をオフ",
   localSignals: "ローカル信号",
+  sampleNotice:
+    "これらの送信はこのビルドのために書かれ、それぞれ6言語で用意されています。トラフィックではなく標本です——REPTILINK にはまだ利用者がおらず、このサイトのどの数値も推定や捏造ではありません。",
+  countedNotice:
+    "このビルドに実在する送信を数えた値です。推計は一つもありません。",
+  transmissions: "送信",
+  archiveNodes: "アーカイブ・ノード",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "この周波数では何かが応答します。あなたの言語を話さないため、チャンネルが翻訳します——そして他と同じく原文を残します。",
+  channelNotice:
+    "このエンティティは言語モデルではなくスクリプトです。入力を決められた応答集合と照合するだけです。書いた内容がブラウザの外に出ることはありません。",
+  channelPlaceholder: "あなたの言語で書いてください。",
+  send: "送信",
+  receiving: "受信中",
+  you: "あなた",
+  clearChannel: "チャンネルを閉じる",
   activeLanguages: "使用言語",
-  entityActivity: "エンティティ活動",
 };
 
 const es: Dict = {
@@ -365,8 +417,23 @@ const es: Dict = {
   audioOn: "ACTIVAR AUDIO",
   audioOff: "DESACTIVAR AUDIO",
   localSignals: "SEÑALES LOCALES",
+  sampleNotice:
+    "Estas transmisiones se escribieron para esta versión, cada una en seis idiomas. Son muestras, no tráfico: REPTILINK todavía no tiene usuarios, y ninguna cifra de este sitio es estimada ni inventada.",
+  countedNotice:
+    "Contado a partir de las transmisiones que existen en esta versión. Aquí no hay ninguna proyección.",
+  transmissions: "TRANSMISIONES",
+  archiveNodes: "NODOS DEL ARCHIVE",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "Algo responde en esta frecuencia. No habla tu idioma, así que el canal traduce, y conserva el original, como en todo lo demás.",
+  channelNotice:
+    "Esta entidad está escrita a mano, no es un modelo de lenguaje. Compara lo que escribes con un conjunto fijo de respuestas. Nada de lo que escribas sale de tu navegador.",
+  channelPlaceholder: "Escribe en tu idioma.",
+  send: "ENVIAR",
+  receiving: "RECIBIENDO",
+  you: "TÚ",
+  clearChannel: "CERRAR CANAL",
   activeLanguages: "IDIOMAS ACTIVOS",
-  entityActivity: "ACTIVIDAD DE ENTIDADES",
 };
 
 const pt: Dict = {
@@ -437,8 +504,23 @@ const pt: Dict = {
   audioOn: "ATIVAR ÁUDIO",
   audioOff: "DESATIVAR ÁUDIO",
   localSignals: "SINAIS LOCAIS",
+  sampleNotice:
+    "Estas transmissões foram escritas para esta versão, cada uma em seis idiomas. São amostras, não tráfego: a REPTILINK ainda não tem usuários, e nenhum número deste site é estimado ou inventado.",
+  countedNotice:
+    "Contado a partir das transmissões que existem nesta versão. Não há nenhuma projeção aqui.",
+  transmissions: "TRANSMISSÕES",
+  archiveNodes: "NÓS DO ARCHIVE",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "Algo responde nesta frequência. Não fala o seu idioma, então o canal traduz — e guarda o original, como em todo o resto.",
+  channelNotice:
+    "Esta entidade é roteirizada, não é um modelo de linguagem. Ela compara o que você escreve com um conjunto fixo de respostas. Nada do que você digitar sai do seu navegador.",
+  channelPlaceholder: "Escreva no seu idioma.",
+  send: "ENVIAR",
+  receiving: "RECEBENDO",
+  you: "VOCÊ",
+  clearChannel: "FECHAR CANAL",
   activeLanguages: "IDIOMAS ATIVOS",
-  entityActivity: "ATIVIDADE DE ENTIDADES",
 };
 
 const th: Dict = {
@@ -507,8 +589,23 @@ const th: Dict = {
   audioOn: "เปิดเสียง",
   audioOff: "ปิดเสียง",
   localSignals: "สัญญาณท้องถิ่น",
+  sampleNotice:
+    "ข้อความเหล่านี้ถูกเขียนขึ้นสำหรับบิลด์นี้ แต่ละชิ้นมีครบหกภาษา มันคือตัวอย่าง ไม่ใช่ทราฟฟิก — REPTILINK ยังไม่มีผู้ใช้ และไม่มีตัวเลขใดในเว็บนี้ที่ประมาณหรือกุขึ้น",
+  countedNotice:
+    "นับจากข้อความที่มีอยู่จริงในบิลด์นี้ ไม่มีการคาดการณ์ใด ๆ",
+  transmissions: "การส่งสัญญาณ",
+  archiveNodes: "โหนดของ ARCHIVE",
+  channel: "PRIVATE CHANNEL",
+  channelIntro:
+    "มีบางสิ่งตอบกลับบนความถี่นี้ มันไม่ได้พูดภาษาของคุณ ช่องสัญญาณจึงแปลให้ และเก็บต้นฉบับไว้เหมือนที่อื่นทุกแห่ง",
+  channelNotice:
+    "เอนทิตีนี้เขียนด้วยสคริปต์ ไม่ใช่โมเดลภาษา มันเทียบสิ่งที่คุณพิมพ์กับชุดคำตอบที่กำหนดไว้ สิ่งที่คุณพิมพ์ไม่ออกไปจากเบราว์เซอร์",
+  channelPlaceholder: "เขียนด้วยภาษาของคุณ",
+  send: "ส่ง",
+  receiving: "กำลังรับ",
+  you: "คุณ",
+  clearChannel: "ปิดช่องสัญญาณ",
   activeLanguages: "ภาษาที่ใช้งาน",
-  entityActivity: "กิจกรรมของเอนทิตี",
 };
 
 export const DICT: Record<Locale, Dict> = { en, ko, ja, es, pt, th };

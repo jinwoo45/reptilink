@@ -5,7 +5,7 @@ import { ARCHIVE } from "@/data/archive";
 const BASE = "https://reptilink.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["", "/signal", "/radar", "/archive", "/scan"];
+  const paths = ["", "/signal", "/radar", "/archive", "/channel", "/scan"];
   const entries: MetadataRoute.Sitemap = [{ url: BASE, priority: 1 }];
 
   for (const locale of LOCALES) {

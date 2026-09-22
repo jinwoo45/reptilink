@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/signal", label: "SIGNAL" },
   { href: "/radar", label: "RADAR" },
   { href: "/archive", label: "ARCHIVE" },
+  { href: "/channel", label: "CHANNEL" },
   { href: "/scan", label: "INDEX" },
 ];
 

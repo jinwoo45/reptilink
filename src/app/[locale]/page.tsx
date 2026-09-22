@@ -31,7 +31,6 @@ export default async function Home({
   const locale = resolveLocale((await params).locale);
   const dict = getDict(locale);
 
-  const totalSignals = NODES.reduce((s, n) => s + n.signals, 0);
   const featured = ARCHIVE.slice(0, 8);
 
   return (
@@ -43,24 +42,28 @@ export default async function Home({
         </h1>
         <p className="page__intro">{dict.taglineAlt}</p>
 
+        {/* Everything here is a count of what this build contains. */}
         <dl className="hero__stats">
           <div>
-            <dt className="mono-label">SIGNALS</dt>
-            <dd className="toxic">{totalSignals.toLocaleString("en-US")}</dd>
+            <dt className="mono-label">{dict.transmissions}</dt>
+            <dd className="toxic">{SIGNALS.length}</dd>
           </div>
           <div>
-            <dt className="mono-label">NODES</dt>
-            <dd>{NODES.length}</dd>
+            <dt className="mono-label">{dict.archiveNodes}</dt>
+            <dd>{ARCHIVE.length}</dd>
           </div>
           <div>
             <dt className="mono-label">{dict.availableLanguages}</dt>
             <dd>{LOCALES.length}</dd>
           </div>
           <div>
-            <dt className="mono-label">ARCHIVE</dt>
-            <dd>{ARCHIVE.length}</dd>
+            <dt className="mono-label">NODES</dt>
+            <dd>{NODES.filter((n) => !n.fiction).length}</dd>
           </div>
         </dl>
+        <p className="note" style={{ marginTop: 16 }}>
+          {dict.countedNotice}
+        </p>
       </section>
 
       <section className="wrap" style={{ marginTop: 54 }}>
@@ -104,7 +107,7 @@ export default async function Home({
           <Link href={`/${locale}/radar`} className="split__card panel pad">
             <p className="mono-label">REPTI RADAR</p>
             <p className="display--sm" style={{ marginTop: 10 }}>
-              {SIGNALS.length} LIVE
+              {NODES.filter((n) => !n.fiction).length} NODES
             </p>
             <p className="dim" style={{ marginTop: 10, fontSize: 12 }}>
               {dict.radarIntro}

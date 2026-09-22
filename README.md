@@ -16,8 +16,9 @@ language, with the original still underneath, one click away, never overwritten.
 | §6 Entry Experience | `/` | Boot sequence, then one screen: language and ENTITY IDENTITY, watched by the eye |
 | §10 Global Signal Feed | `/[locale]/signal` | One feed, twelve signals, six languages |
 | §11 View Original Signal | in every signal card | Original / translation side by side |
-| §12 REPTI RADAR | `/[locale]/radar` | City-level nodes only, no individual positions |
+| §12 REPTI RADAR | `/[locale]/radar` | City-level nodes only, counted from real data |
 | §15–17 The Archive | `/[locale]/archive` | 30 nodes as a knowledge graph, classified |
+| §21 Private Channel | `/[locale]/channel` | A correspondent you share no language with |
 | §22 Reptilian Index | `/[locale]/scan` | Deterministic entertainment scan |
 | §24 ARG | `/origin`, 404 | Fiction layer, traceable and stated plainly |
 | §27 Global SEO | all | `hreflang` on every page, localized metadata, sitemap |
@@ -38,8 +39,14 @@ backend (§30) is out of scope for a single static deployment, so:
   a real provider means replacing the data source, not the UI.
 - **Signals you transmit stay in your browser session.** Nothing is persisted or
   sent anywhere.
-- Private Channel, Case, Encounter and cross-lingual search (§19–21, §32) are
-  V0.2/V0.3 and are not here.
+- **The PRIVATE CHANNEL entity is a script, not a language model.** It matches
+  your message against a keyword table and answers from a fixed set of replies,
+  all of which are in `src/data/entity.ts`. It runs entirely in your browser and
+  the UI says so on the page. What it demonstrates is the §21 contract: a
+  correspondent whose language you do not share, translated on arrival, with the
+  original transmission kept underneath.
+- Case, Encounter and cross-lingual search (§19, §20, §32) are V0.2/V0.3 and are
+  not here.
 
 ## The eye
 
@@ -48,6 +55,17 @@ as vector so it stays sharp and weighs nothing. It follows the pointer, drifts
 in saccades when nobody moves, blinks, and a nictitating membrane crosses it now
 and then. Declaring yourself REPTILIAN dilates the pupil and the readout changes
 to ENTITY RECOGNISED. All of it stands down under `prefers-reduced-motion`.
+
+## No invented numbers
+
+Every figure the site displays is counted from what this build actually
+contains — twelve transmissions, thirty archive nodes, six languages, eleven
+nodes. There are no follower counts, no relay counts, no per-city signal
+volumes, and no aggregate "83,108 SIGNALS". REPTILINK has no users, and the
+site does not pretend otherwise: the feed carries a notice saying its
+transmissions are authored specimens, and the radar says its numbers are counts
+rather than projections. The one node that is not a place, `UNKNOWN`, is
+labelled ☠ FICTION on the map.
 
 ## Content honesty
 

@@ -96,6 +96,10 @@ export default function Feed({
         ))}
       </div>
 
+      <p className="note" style={{ margin: "0 0 18px" }}>
+        {dict.sampleNotice}
+      </p>
+
       <div className="feed">
         {visible.map((s) => (
           <SignalCard key={s.id} signal={s} locale={locale} dict={dict} />

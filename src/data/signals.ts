@@ -6,8 +6,6 @@ export type Signal = {
   node: string;
   time: string;
   originalLanguage: Locale;
-  relay: number;
-  watch: number;
   archive?: string;
   text: Partial<Record<Locale, string>>;
 };
@@ -19,8 +17,6 @@ export const SIGNALS: Signal[] = [
     node: "seoul",
     time: "03:21",
     originalLanguage: "ko",
-    relay: 81,
-    watch: 192,
     archive: "reptilian",
     text: {
       ko: "또 같은 꿈을 꿨다. 지하철 3호선인데 역 이름이 전부 지워져 있었다.",
@@ -37,8 +33,6 @@ export const SIGNALS: Signal[] = [
     node: "tokyo",
     time: "02:48",
     originalLanguage: "ja",
-    relay: 210,
-    watch: 604,
     archive: "ufo",
     text: {
       ja: "昨夜、奇妙な光を見た。二分間、まったく動かなかった。飛行機はああいう止まり方をしない。",
@@ -55,8 +49,6 @@ export const SIGNALS: Signal[] = [
     node: "mexico-city",
     time: "23:07",
     originalLanguage: "es",
-    relay: 144,
-    watch: 388,
     archive: "underground-civilization",
     text: {
       es: "Debajo del centro hay túneles que no aparecen en ningún plano público. Mi abuelo trabajó en ellos y nunca quiso decir para qué eran.",
@@ -73,8 +65,6 @@ export const SIGNALS: Signal[] = [
     node: "bangkok",
     time: "01:12",
     originalLanguage: "th",
-    relay: 96,
-    watch: 241,
     archive: "naga",
     text: {
       th: "ยายบอกว่าอย่าถ่ายรูปแม่น้ำตอนตีหนึ่ง ผมถ่าย และในภาพมีเส้นหนึ่งที่ไม่มีอยู่ตอนผมยืนดู",
@@ -91,8 +81,6 @@ export const SIGNALS: Signal[] = [
     node: "sao-paulo",
     time: "04:33",
     originalLanguage: "pt",
-    relay: 58,
-    watch: 177,
     archive: "internet-mystery-culture",
     text: {
       pt: "Achei um canal com 400 vídeos, todos de 11 segundos, todos gravados no mesmo corredor. A conta foi criada em 2009 e nunca comentou nada.",
@@ -109,8 +97,6 @@ export const SIGNALS: Signal[] = [
     node: "los-angeles",
     time: "03:02",
     originalLanguage: "en",
-    relay: 302,
-    watch: 811,
     archive: "remote-viewing",
     text: {
       en: "Between 3:02 and 3:06 the scanner picks up a woman counting in a language nobody in the group has identified. Same four minutes, every night, for six weeks.",
@@ -127,8 +113,6 @@ export const SIGNALS: Signal[] = [
     node: "berlin",
     time: "22:19",
     originalLanguage: "en",
-    relay: 47,
-    watch: 133,
     archive: "government-experiments",
     text: {
       en: "The building has a basement level that the lift acknowledges but will not stop at. The button lights. The car passes it.",
@@ -145,8 +129,6 @@ export const SIGNALS: Signal[] = [
     node: "lima",
     time: "05:41",
     originalLanguage: "es",
-    relay: 71,
-    watch: 205,
     archive: "ancient-civilization",
     text: {
       es: "Los geoglifos nuevos que encontraron el año pasado no eran nuevos. Estaban en una foto de 1954 que nadie volvió a mirar.",
@@ -163,8 +145,6 @@ export const SIGNALS: Signal[] = [
     node: "reykjavik",
     time: "00:58",
     originalLanguage: "en",
-    relay: 22,
-    watch: 96,
     archive: "collective-consciousness",
     text: {
       en: "Four of us, none from the same country, described the same room to each other before anyone had described it. I have no theory. I only have the transcript.",
@@ -181,8 +161,6 @@ export const SIGNALS: Signal[] = [
     node: "jakarta",
     time: "02:04",
     originalLanguage: "en",
-    relay: 63,
-    watch: 158,
     archive: "interdimensional-beings",
     text: {
       en: "There is a frequency here that carries nothing at all — no static, no carrier, nothing. Dead bands hiss. This one is silent.",
@@ -199,8 +177,6 @@ export const SIGNALS: Signal[] = [
     node: "london",
     time: "19:45",
     originalLanguage: "en",
-    relay: 188,
-    watch: 520,
     archive: "secret-society",
     text: {
       en: "Request 40 of the file was released in full. Requests 1 through 39 were released in full. Request 41 does not exist and never did, according to the index that lists it.",
@@ -217,8 +193,6 @@ export const SIGNALS: Signal[] = [
     node: "seoul",
     time: "04:18",
     originalLanguage: "ko",
-    relay: 119,
-    watch: 287,
     archive: "psychedelic-experience",
     text: {
       ko: "같은 얼굴을 세 도시에서 봤다. 나는 그 사람을 모른다. 그 사람도 매번 나를 못 알아본다. 그런데 매번 먼저 고개를 돌린다.",

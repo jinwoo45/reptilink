@@ -72,8 +72,9 @@ export default function SignalCard({
 
       <footer className="sig__foot">
         <span>🦎 {dict.signals} {signal.id}</span>
-        <span>⌁ {dict.relay} {signal.relay}</span>
-        <span>◉ {dict.watch} {signal.watch}</span>
+        <span>
+          ⌁ {LOCALE_META[signal.originalLanguage].english.toUpperCase()} ORIGIN
+        </span>
         {linked && (
           <Link
             href={`/${locale}/archive/${linked.slug}`}

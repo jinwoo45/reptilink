@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { MAX_NODE_SIGNALS, NODES } from "@/data/nodes";
+import { MAX_NODE_SIGNALS, NODES, languagesAt, signalsAt } from "@/data/nodes";
 import { SIGNALS } from "@/data/signals";
 import { ARCHIVE_BY_SLUG, archiveTitle } from "@/data/archive";
 import { LOCALE_META, type Locale } from "@/lib/i18n";
@@ -36,7 +36,7 @@ export default function Radar({
             const cx = n.x * 100;
             const cy = n.y * 56;
             const on = n.id === selected;
-            const r = 0.7 + (n.signals / MAX_NODE_SIGNALS) * 1.8;
+            const r = 0.7 + (signalsAt(n.id) / MAX_NODE_SIGNALS) * 1.8;
             return (
               <g key={n.id} onClick={() => setSelected(n.id)} style={{ cursor: "pointer" }}>
                 <circle cx={cx} cy={cy} r={r + 2.6} fill="transparent" />
@@ -54,7 +54,7 @@ export default function Radar({
                   cx={cx}
                   cy={cy}
                   r={r}
-                  fill={n.id === "unknown" ? "#8d35ff" : on ? "#b6ff00" : "#46443f"}
+                  fill={n.fiction ? "#8d35ff" : on ? "#b6ff00" : "#46443f"}
                 />
                 <text
                   x={cx + r + 1.2}
@@ -74,20 +74,18 @@ export default function Radar({
       <div className="radar__side">
         <ul className="bars">
           {NODES.map((n) => {
-            const filled =
-              n.id === "unknown"
-                ? 9
-                : Math.max(1, Math.round((n.signals / MAX_NODE_SIGNALS) * 9));
+            const count = signalsAt(n.id);
+            const filled = Math.round((count / MAX_NODE_SIGNALS) * 9);
             return (
               <li key={n.id}>
                 <button onClick={() => setSelected(n.id)} aria-pressed={n.id === selected}>
                   <span className="bars__name">{n.name}</span>
-                  <span className={n.id === "unknown" ? "acid" : "toxic"}>
+                  <span className={n.fiction ? "acid" : "toxic"}>
                     {"█".repeat(filled)}
                     <span className="faint">{"░".repeat(9 - filled)}</span>
                   </span>
                   <span className="bars__n dim">
-                    {n.id === "unknown" ? "???" : n.signals.toLocaleString("en-US")}
+                    {n.fiction ? "☠" : count}
                   </span>
                 </button>
               </li>
@@ -99,6 +97,11 @@ export default function Radar({
           <p className="mono-label">
             {node.name} / {node.country}
           </p>
+          {node.fiction && (
+            <p className="tag tag--fiction" style={{ marginTop: 10 }}>
+              ☠ FICTION — THIS NODE IS NOT A PLACE
+            </p>
+          )}
 
           <div className="radar__meta">
             <div>
@@ -108,14 +111,14 @@ export default function Radar({
             <div>
               <p className="mono-label">{dict.activeLanguages}</p>
               <p>
-                {node.languages.length
-                  ? node.languages.map((l) => LOCALE_META[l].code).join(" / ")
-                  : "???"}
+                {languagesAt(node.id)
+                  .map((l) => LOCALE_META[l].code)
+                  .join(" / ") || "—"}
               </p>
             </div>
             <div>
-              <p className="mono-label">{dict.entityActivity}</p>
-              <p>{node.id === "unknown" ? "UNRESOLVED" : `${node.tz} PEAK`}</p>
+              <p className="mono-label">TIME ZONE</p>
+              <p>{node.tz}</p>
             </div>
           </div>
 
@@ -141,6 +144,10 @@ export default function Radar({
             </p>
           )}
         </div>
+
+        <p className="note" style={{ marginTop: 16 }}>
+          {dict.countedNotice}
+        </p>
       </div>
     </div>
   );
