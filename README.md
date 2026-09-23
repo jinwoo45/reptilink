@@ -14,6 +14,7 @@ language, with the original still underneath, one click away, never overwritten.
 | Spec section | Route | State |
 |---|---|---|
 | §6 Entry Experience | `/` | Boot sequence, then one screen: language and ENTITY IDENTITY, watched by the eye |
+| Encounter | `/[locale]` | Home is a conversation with the reptilian — live model, or local script without a key |
 | §10 Global Signal Feed | `/[locale]/signal` | One feed, twelve signals, six languages |
 | §11 View Original Signal | in every signal card | Original / translation side by side |
 | §12 REPTI RADAR | `/[locale]/radar` | City-level nodes only, counted from real data |
@@ -40,7 +41,15 @@ backend (§30) is out of scope for a single static deployment, so:
   a real provider means replacing the data source, not the UI.
 - **Signals you transmit stay in your browser session.** Nothing is persisted or
   sent anywhere.
-- **The PRIVATE CHANNEL entity is a script, not a language model.** It matches
+- **The reptilian is live only when the deployment has an API key.** With
+  `ANTHROPIC_API_KEY` set, `/api/entity` streams replies from Claude
+  (`claude-opus-5`, low effort, server-side refusal fallback), playing a
+  reptilian that knows conspiracy lore and never presents a theory as true
+  (`src/lib/entityPrompt.ts`). Without a key, or when the live link fails, the
+  local script answers instead — including every ARCHIVE topic, in every
+  language. Abuse limits in the route are per server instance; set a monthly
+  spend limit on the key.
+- **The local script is a script, not a language model.** It matches
   your message against a keyword table and answers from a fixed set of replies,
   all of which are in `src/data/entity.ts`. It runs entirely in your browser and
   the UI says so on the page. What it demonstrates is the §21 contract: a

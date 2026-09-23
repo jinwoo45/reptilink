@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import Feed from "@/components/Feed";
+import Encounter from "@/components/Encounter";
 import { getDict } from "@/data/dict";
-import { resolveLocale, LOCALE_META, LOCALES } from "@/lib/i18n";
+import { resolveLocale } from "@/lib/i18n";
 import { localeAlternates } from "@/lib/seo";
-import { ARCHIVE, archiveTitle } from "@/data/archive";
-import { NODES } from "@/data/nodes";
+import { ARCHIVE } from "@/data/archive";
 import { SIGNALS } from "@/data/signals";
+import { NODES } from "@/data/nodes";
 
 export async function generateMetadata({
   params,
@@ -17,12 +17,16 @@ export async function generateMetadata({
   const dict = getDict(locale);
   return {
     title: { absolute: `REPTILINK — ${dict.tagline}` },
-    description: dict.taglineAlt,
+    description: dict.channelIntro,
     alternates: localeAlternates(locale, ""),
     openGraph: { title: "REPTILINK", description: dict.tagline, locale },
   };
 }
 
+/**
+ * Home is the encounter. Everything else on the network is one level down,
+ * for whoever wants to go deeper after the conversation.
+ */
 export default async function Home({
   params,
 }: {
@@ -31,97 +35,30 @@ export default async function Home({
   const locale = resolveLocale((await params).locale);
   const dict = getDict(locale);
 
-  const featured = ARCHIVE.slice(0, 8);
+  const deeper = [
+    { href: "/archive", label: "THE ARCHIVE", count: ARCHIVE.length, text: dict.archiveIntro },
+    { href: "/signal", label: "SIGNAL", count: SIGNALS.length, text: dict.feedIntro },
+    { href: "/radar", label: "REPTI RADAR", count: NODES.filter((n) => !n.fiction).length, text: dict.radarIntro },
+    { href: "/scan", label: "REPTILIAN INDEX", count: null, text: dict.scanIntro },
+  ];
 
   return (
-    <main className="page">
-      <section className="wrap hero">
-        <p className="mono-label">REPTILIAN SIGNAL / {LOCALE_META[locale].code}</p>
-        <h1 className="display rgb" data-text={dict.tagline} style={{ marginTop: 14 }}>
-          {dict.tagline}
-        </h1>
-        <p className="page__intro">{dict.taglineAlt}</p>
+    <main className="wrap enc-page">
+      <Encounter locale={locale} dict={dict} />
 
-        {/* Everything here is a count of what this build contains. */}
-        <dl className="hero__stats">
-          <div>
-            <dt className="mono-label">{dict.transmissions}</dt>
-            <dd className="toxic">{SIGNALS.length}</dd>
-          </div>
-          <div>
-            <dt className="mono-label">{dict.archiveNodes}</dt>
-            <dd>{ARCHIVE.length}</dd>
-          </div>
-          <div>
-            <dt className="mono-label">{dict.availableLanguages}</dt>
-            <dd>{LOCALES.length}</dd>
-          </div>
-          <div>
-            <dt className="mono-label">NODES</dt>
-            <dd>{NODES.filter((n) => !n.fiction).length}</dd>
-          </div>
-        </dl>
-        <p className="note" style={{ marginTop: 16 }}>
-          {dict.countedNotice}
-        </p>
-      </section>
-
-      <section className="wrap" style={{ marginTop: 54 }}>
-        <div className="page__head">
-          <h2 className="display--sm">{dict.globalFeed}</h2>
-          <p className="page__intro">{dict.feedIntro}</p>
-        </div>
-        <Feed locale={locale} dict={dict} showCompose={false} limit={4} />
-        <Link
-          href={`/${locale}/signal`}
-          className="btn"
-          style={{ marginTop: 20 }}
-        >
-          {dict.globalFeed} →
-        </Link>
-      </section>
-
-      <section className="wrap" style={{ marginTop: 64 }}>
-        <div className="page__head">
-          <h2 className="display--sm">THE ARCHIVE</h2>
-          <p className="page__intro">{dict.archiveIntro}</p>
-        </div>
-        <ul className="chips">
-          {featured.map((n) => (
-            <li key={n.slug}>
-              <Link href={`/${locale}/archive/${n.slug}`} className="chip">
-                {archiveTitle(n, locale)}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <Link href={`/${locale}/archive`} className="chip chip--more">
-              +{ARCHIVE.length - featured.length}
+      <section className="deeper">
+        <h2 className="mono-label">{dict.goDeeper}</h2>
+        <div className="deeper__grid">
+          {deeper.map((d) => (
+            <Link key={d.href} href={`/${locale}${d.href}`} className="deeper__card panel">
+              <span className="mono-label">
+                {d.label}
+                {d.count !== null && <span className="toxic"> · {d.count}</span>}
+              </span>
+              <span className="deeper__text">{d.text}</span>
+              <span className="deeper__go">→</span>
             </Link>
-          </li>
-        </ul>
-      </section>
-
-      <section className="wrap" style={{ marginTop: 64 }}>
-        <div className="split">
-          <Link href={`/${locale}/radar`} className="split__card panel pad">
-            <p className="mono-label">REPTI RADAR</p>
-            <p className="display--sm" style={{ marginTop: 10 }}>
-              {NODES.filter((n) => !n.fiction).length} NODES
-            </p>
-            <p className="dim" style={{ marginTop: 10, fontSize: 12 }}>
-              {dict.radarIntro}
-            </p>
-          </Link>
-          <Link href={`/${locale}/scan`} className="split__card panel pad">
-            <p className="mono-label">REPTILIAN INDEX</p>
-            <p className="display--sm toxic" style={{ marginTop: 10 }}>
-              ██████████░░ ?
-            </p>
-            <p className="dim" style={{ marginTop: 10, fontSize: 12 }}>
-              {dict.scanIntro}
-            </p>
-          </Link>
+          ))}
         </div>
       </section>
     </main>

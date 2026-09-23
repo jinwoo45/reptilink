@@ -7,11 +7,10 @@ import { LOCALES, LOCALE_META, type Locale } from "@/lib/i18n";
 import AudioToggle from "./AudioToggle";
 
 const LINKS = [
-  { href: "", label: "HOME" },
+  { href: "", label: "CONTACT" },
   { href: "/signal", label: "SIGNAL" },
   { href: "/radar", label: "RADAR" },
   { href: "/archive", label: "ARCHIVE" },
-  { href: "/channel", label: "CHANNEL" },
   { href: "/scan", label: "INDEX" },
   { href: "/search", label: "⌕ SEARCH" },
 ];

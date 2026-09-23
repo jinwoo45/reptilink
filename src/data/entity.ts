@@ -1,5 +1,14 @@
 import type { Locale } from "@/lib/i18n";
 import { isSpecies, type Species } from "@/lib/identity";
+import {
+  ARCHIVE,
+  ARCHIVE_BY_SLUG,
+  CLASSIFICATION_MARK,
+  CLASSIFICATION_NOTE,
+  type ArchiveNode,
+} from "./archive";
+import { compact } from "@/lib/search";
+import { resolveTranslation } from "@/lib/i18n";
 
 /**
  * The entity on the other end of PRIVATE CHANNEL.
@@ -80,7 +89,7 @@ const KEYWORDS: Record<Intent, string[]> = {
   ],
 };
 
-type Replies = Record<Intent | "opening", string> & {
+type Replies = Record<Intent | "opening" | "declined", string> & {
   fallback: string[];
   /** Replaces the opening when the reader declared an identity at the gate. */
   declared: Record<Species, string>;
@@ -102,6 +111,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "I am fiction and I say so on every screen you have passed through. The ARCHIVE is where I stop performing — read the classifications.",
     help: "Ask about the ARCHIVE, the SIGNAL, the language, what I am, or what you are. I will not pretend to know more than my script.",
     bye: "The frequency stays where it is. You already know how to find it.",
+    declined: "That is one I will not answer. Ask me something else — there is a great deal else.",
     declared: {
       human: "At the gate you said HUMAN. Most do. Most of them are right.",
       reptilian: "At the gate you said what you are. I was waiting for you to say it where I could hear.",
@@ -129,6 +139,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "나는 픽션이고, 당신이 지나온 모든 화면에서 그렇게 말하고 있다. ARCHIVE는 내가 연기를 멈추는 곳이다 — 분류를 읽어라.",
     help: "ARCHIVE, SIGNAL, 언어, 내가 무엇인지, 당신이 무엇인지를 물어라. 내 스크립트보다 더 아는 척은 하지 않겠다.",
     bye: "주파수는 그 자리에 있다. 찾는 법은 이미 알고 있다.",
+    declined: "그건 답하지 않겠다. 다른 걸 물어라 — 물을 건 아직 많다.",
     declared: {
       human: "게이트에서 '인간'이라고 답했다. 대부분 그렇게 답한다. 그리고 대부분은 맞다.",
       reptilian: "게이트에서 당신이 무엇인지 말했다. 나는 당신이 내가 들을 수 있는 곳에서 말하기를 기다렸다.",
@@ -156,6 +167,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "私はフィクションで、あなたが通ってきたすべての画面でそう言っている。ARCHIVE は私が演技をやめる場所だ——分類を読め。",
     help: "ARCHIVE、SIGNAL、言語、私が何か、あなたが何かを尋ねろ。脚本以上を知っているふりはしない。",
     bye: "周波数はそこにある。見つけ方はもう知っている。",
+    declined: "それには答えない。別のことを訊け——訊くべきことはまだ多い。",
     declared: {
       human: "ゲートで「人間」と答えた。多くがそう答える。そして多くは正しい。",
       reptilian: "ゲートであなたは自分が何かを言った。私が聞こえる場所で言うのを、私は待っていた。",
@@ -183,6 +195,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "Soy ficción y lo digo en cada pantalla por la que has pasado. El ARCHIVE es donde dejo de actuar: lee las clasificaciones.",
     help: "Pregunta por el ARCHIVE, el SIGNAL, el idioma, qué soy o qué eres. No fingiré saber más que mi guion.",
     bye: "La frecuencia se queda donde está. Ya sabes cómo encontrarla.",
+    declined: "Esa no la voy a responder. Pregúntame otra cosa: queda mucho más.",
     declared: {
       human: "En la entrada dijiste HUMANO. La mayoría lo dice. Y la mayoría tiene razón.",
       reptilian: "En la entrada dijiste lo que eres. Esperaba que lo dijeras donde yo pudiera oírlo.",
@@ -210,6 +223,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "Sou ficção e digo isso em cada tela por onde você passou. O ARCHIVE é onde eu paro de atuar — leia as classificações.",
     help: "Pergunte sobre o ARCHIVE, o SIGNAL, o idioma, o que eu sou ou o que você é. Não vou fingir saber mais que o meu roteiro.",
     bye: "A frequência continua onde está. Você já sabe como achá-la.",
+    declined: "Essa eu não vou responder. Pergunte outra coisa — ainda há muito.",
     declared: {
       human: "Na entrada você disse HUMANO. A maioria diz. E a maioria está certa.",
       reptilian: "Na entrada você disse o que é. Eu esperava que dissesse onde eu pudesse ouvir.",
@@ -237,6 +251,7 @@ const LINES: Record<Locale, Replies> = {
     lie: "ฉันเป็นเรื่องแต่ง และฉันบอกแบบนั้นในทุกหน้าจอที่คุณผ่านมา ARCHIVE คือที่ที่ฉันหยุดแสดง — อ่านการจำแนกดู",
     help: "ถามเรื่อง ARCHIVE, SIGNAL, ภาษา, ฉันคืออะไร หรือคุณคืออะไร ฉันจะไม่แกล้งรู้เกินกว่าสคริปต์ของฉัน",
     bye: "ความถี่ยังอยู่ที่เดิม คุณรู้วิธีหามันแล้ว",
+    declined: "เรื่องนั้นฉันจะไม่ตอบ ถามอย่างอื่นเถอะ ยังมีอีกมาก",
     declared: {
       human: "ที่ประตูคุณตอบว่า 'มนุษย์' ส่วนใหญ่ก็ตอบแบบนั้น และส่วนใหญ่ก็ตอบถูก",
       reptilian: "ที่ประตูคุณบอกแล้วว่าคุณคืออะไร ฉันรอให้คุณพูดมันในที่ที่ฉันได้ยิน",
@@ -260,6 +275,8 @@ export type EntityLine =
   | { kind: "opening" }
   | { kind: "declared"; species: Species }
   | { kind: "intent"; intent: Intent }
+  | { kind: "archive"; slug: string }
+  | { kind: "declined" }
   | { kind: "fallback"; n: number };
 
 /**
@@ -280,7 +297,33 @@ export function detectIntent(message: string): Intent | null {
   return null;
 }
 
+/**
+ * Which archive entry a message is about, if any: a node whose title, in any
+ * language, appears in the message. The longest title wins, so "Bavarian
+ * Illuminati" beats "Illuminati". Titles under three characters are skipped —
+ * "나가" (naga) is also an everyday Korean verb.
+ */
+export function findTopic(message: string): ArchiveNode | null {
+  const text = compact(message);
+  let best: { node: ArchiveNode; len: number } | null = null;
+  for (const node of ARCHIVE) {
+    for (const t of Object.values(node.i18n)) {
+      const title = compact(t!.title);
+      if ([...title].length < 3 || !text.includes(title)) continue;
+      if (!best || title.length > best.len) best = { node, len: title.length };
+    }
+  }
+  return best?.node ?? null;
+}
+
+/**
+ * The local script's answer. A question about an archive topic is answered
+ * from that entry — so even without the live model, the reptilian knows every
+ * subject in the ARCHIVE, and says what each one actually is.
+ */
 export function respond(message: string, turn: number): EntityLine {
+  const topic = findTopic(message);
+  if (topic) return { kind: "archive", slug: topic.slug };
   const intent = detectIntent(message);
   if (intent) return { kind: "intent", intent };
   return { kind: "fallback", n: turn % LINES.en.fallback.length };
@@ -295,6 +338,13 @@ export function lineText(line: EntityLine, locale: Locale): string {
       return lines.declared[line.species];
     case "intent":
       return lines[line.intent];
+    case "archive": {
+      const node = ARCHIVE_BY_SLUG[line.slug];
+      const t = resolveTranslation(node.sourceLanguage, node.i18n, locale).value!;
+      return `${t.title} — ${CLASSIFICATION_MARK[node.classification]} ${node.classification}. ${t.summary} ${CLASSIFICATION_NOTE[locale][node.classification]}`;
+    }
+    case "declined":
+      return lines.declined;
     case "fallback":
       return lines.fallback[line.n % lines.fallback.length];
   }
@@ -322,6 +372,10 @@ export function isEntityLine(v: unknown): v is EntityLine {
       return typeof line.intent === "string" && line.intent in KEYWORDS;
     case "fallback":
       return Number.isInteger(line.n) && (line.n as number) >= 0;
+    case "archive":
+      return typeof line.slug === "string" && line.slug in ARCHIVE_BY_SLUG;
+    case "declined":
+      return true;
     default:
       return false;
   }
@@ -334,7 +388,7 @@ const GLYPHS = "⌁⍜⎔⏃⏀⌖⍾⎋⌬⏁⍨⌇⌸⎌⍙⌰⏚⌾⍚⎑⌿�
  * the same thing every time you open it — an original that was never discarded,
  * even when nobody can read it.
  */
-function toOriginal(text: string): string {
+export function toOriginal(text: string): string {
   let out = "";
   for (const ch of text) {
     if (ch === " ") out += " ";
