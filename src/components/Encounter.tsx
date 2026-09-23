@@ -86,6 +86,12 @@ export default function Encounter({ locale, dict }: { locale: Locale; dict: Dict
     setSpecies(declared);
     setState(load() ?? fresh(declared));
 
+    // Ready to type on a desktop, without scrolling the eye away. Not on
+    // phones: focusing there raises the keyboard and hides the reptilian.
+    if (window.matchMedia("(min-width: 901px) and (pointer: fine)").matches) {
+      input.current?.focus({ preventScroll: true });
+    }
+
     fetch("/api/entity", { cache: "no-store" })
       .then((r) => r.json())
       .then((d: { live?: boolean }) => setLive(Boolean(d.live)))
@@ -249,17 +255,33 @@ export default function Encounter({ locale, dict }: { locale: Locale; dict: Dict
     <section className="enc">
       <div className="enc__eye">
         <ReptilianEye awake={receiving} recognised={recognised} />
-        <p className="gate__status enc__status">
-          <span className={receiving ? "toxic" : recognised ? "acid" : "dim"}>●</span>
-          <span className="mono-label">
-            {receiving ? dict.receiving : recognised ? "ENTITY RECOGNISED" : "CHANNEL OPEN"}
-          </span>
-          {live !== null && (
-            <span className={`mono-label enc__mode${live ? " toxic" : ""}`}>
-              {live ? "LIVE LINK" : "LOCAL SCRIPT"}
-            </span>
-          )}
-        </p>
+
+        {/* Read like Blur's hero overlay: a name, a maker line, key figures. */}
+        <div className="enc__hero">
+          <p className="enc__name">
+            ENTITY
+            <span className={`enc__pulse${receiving ? " enc__pulse--on" : ""}`} aria-hidden />
+          </p>
+          <p className="mono-label">
+            {receiving ? dict.receiving : recognised ? "ENTITY RECOGNISED" : "ORIGIN UNKNOWN"}
+          </p>
+          <dl className="enc__stats">
+            <div>
+              <dt className="mono-label">{dict.language}</dt>
+              <dd className="acid">UNCLASSIFIED</dd>
+            </div>
+            <div>
+              <dt className="mono-label">YOUR {dict.language}</dt>
+              <dd>{LOCALE_META[locale].native}</dd>
+            </div>
+            <div>
+              <dt className="mono-label">LINK</dt>
+              <dd className={live ? "glow" : "dim"}>
+                {live === null ? "—" : live ? "LIVE" : "LOCAL SCRIPT"}
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
 
       <div className="enc__talk">
@@ -341,9 +363,8 @@ export default function Encounter({ locale, dict }: { locale: Locale; dict: Dict
             }}
             placeholder={dict.askPlaceholder}
             rows={2}
-            autoFocus
           />
-          <button className="btn gate__enter--ready" onClick={() => send()} disabled={!draft.trim() || receiving}>
+          <button className="btn btn--primary" onClick={() => send()} disabled={!draft.trim() || receiving}>
             {dict.send}
           </button>
         </div>

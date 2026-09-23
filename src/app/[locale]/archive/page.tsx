@@ -1,14 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ArchiveGraph from "@/components/ArchiveGraph";
+import ArchiveTable from "@/components/ArchiveTable";
 import { getDict } from "@/data/dict";
-import { resolveLocale, resolveTranslation } from "@/lib/i18n";
+import { resolveLocale } from "@/lib/i18n";
 import { localeAlternates } from "@/lib/seo";
-import {
-  ARCHIVE,
-  CLASSIFICATION_MARK,
-  type ArchiveText,
-} from "@/data/archive";
 
 export async function generateMetadata({
   params,
@@ -42,61 +38,14 @@ export default async function ArchivePage({
         <p className="page__intro">{dict.archiveIntro}</p>
       </div>
 
-      {/* A plain GET form: it works before, and without, any JavaScript. */}
-      <form
-        action={`/${locale}/search`}
-        className="searchbar searchbar--compact"
-        role="search"
-      >
-        <span className="searchbar__icon" aria-hidden>
-          ⌕
-        </span>
-        <input
-          type="search"
-          name="q"
-          placeholder={dict.searchPlaceholder}
-          aria-label={dict.search}
-        />
-        <button className="btn" type="submit">
-          {dict.search}
-        </button>
-      </form>
+      <ArchiveTable locale={locale} showSummary />
 
-      <ArchiveGraph locale={locale} />
-
-      <ul className="nodes" style={{ marginTop: 26 }}>
-        {ARCHIVE.map((node) => {
-          const t = resolveTranslation<ArchiveText>(
-            node.sourceLanguage,
-            node.i18n,
-            locale
-          );
-          return (
-            <li key={node.slug}>
-              <Link href={`/${locale}/archive/${node.slug}`}>
-                <span className="nodes__mark">
-                  {CLASSIFICATION_MARK[node.classification]}
-                </span>
-                <span>
-                  <span className="nodes__title">{t.value.title}</span>
-                  <span
-                    className="nodes__sum"
-                    style={{ display: "block" }}
-                    lang={t.language}
-                  >
-                    {t.value.summary}
-                  </span>
-                </span>
-                <span
-                  className={`tag tag--${node.classification.toLowerCase()}`}
-                >
-                  {node.classification}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <section style={{ marginTop: 48 }}>
+        <h2 className="mono-label">KNOWLEDGE GRAPH</h2>
+        <div style={{ marginTop: 12 }}>
+          <ArchiveGraph locale={locale} />
+        </div>
+      </section>
     </main>
   );
 }

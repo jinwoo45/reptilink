@@ -86,7 +86,7 @@ export default function Scan({
           dict={dict}
         />
         <div className="scan__actions">
-          <button className="btn gate__enter--ready" onClick={begin}>
+          <button className="btn btn--primary" onClick={begin}>
             {dict.startScan} <span className="caret" />
           </button>
         </div>
@@ -103,7 +103,7 @@ export default function Scan({
         <p className="dim" style={{ maxWidth: "58ch" }}>
           {dict.scanIntro}
         </p>
-        <button className="btn" style={{ marginTop: 20 }} onClick={begin}>
+        <button className="btn btn--primary" style={{ marginTop: 20 }} onClick={begin}>
           {dict.startScan} <span className="caret" />
         </button>
       </div>
@@ -149,7 +149,7 @@ export default function Scan({
       <p className="mono-label">{dict.scanComplete}</p>
       <ResultCard result={scanResult(answers, locale)} language={locale} dict={dict} />
       <div className="scan__actions">
-        <button className="btn" onClick={share}>
+        <button className="btn btn--primary" onClick={share}>
           {copied ? dict.copied : dict.shareCard}
         </button>
         <button className="btn btn--ghost" onClick={begin}>

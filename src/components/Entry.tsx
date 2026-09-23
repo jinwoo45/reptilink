@@ -103,7 +103,7 @@ export default function Entry() {
 
   if (stage === "return" && species) {
     return (
-      <main className="entry grid-lines">
+      <main className="entry grid-lines" lang={locale}>
         <div className="entry__inner">
           <section aria-live="polite">
             <pre className="entry__boot flicker">
@@ -128,7 +128,7 @@ export default function Entry() {
 
   if (stage === "boot") {
     return (
-      <main className="entry grid-lines">
+      <main className="entry grid-lines" lang={locale}>
         <div className="entry__inner">
           <section aria-live="polite">
             <pre className="entry__boot flicker">{BOOT_LINES.join("\n")}</pre>
@@ -148,7 +148,7 @@ export default function Entry() {
   }
 
   return (
-    <main className="entry entry--wide grid-lines">
+    <main className="entry entry--wide grid-lines" lang={locale}>
       <div className="gate">
         <div className="gate__art">
           <ReptilianEye awake={species !== null} recognised={recognised} />
@@ -238,7 +238,7 @@ export default function Entry() {
           </section>
 
           <button
-            className={`btn gate__enter${species ? " gate__enter--ready" : ""}`}
+            className={`btn gate__enter${species ? " btn--primary" : ""}`}
             disabled={!species}
             onClick={enter}
           >

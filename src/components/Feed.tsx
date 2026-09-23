@@ -102,11 +102,11 @@ export default function Feed({
                 ))}
               </select>
             </label>
-            <button className="btn" onClick={transmit} disabled={!draft.trim()}>
+            <button className="btn btn--primary" onClick={transmit} disabled={!draft.trim()}>
               {dict.transmit}
             </button>
           </div>
-          <p className="faint" style={{ fontSize: 10, margin: "12px 0 0" }}>
+          <p className="dim" style={{ fontSize: 11, margin: "12px 0 0" }}>
             {dict.localDemoNote}
           </p>
         </div>

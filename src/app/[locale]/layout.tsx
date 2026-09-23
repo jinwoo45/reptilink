@@ -21,9 +21,11 @@ export default async function LocaleLayout({
   const dict = getDict(locale);
 
   return (
-    <>
+    // lang on a wrapper, not only <html>: the root layout renders <html>
+    // before the locale is known, and CSS keys label tracking off :lang().
+    <div lang={locale}>
       <HtmlLang locale={locale} />
-      <Nav locale={locale} />
+      <Nav locale={locale} searchPlaceholder={dict.searchPlaceholder} />
       {children}
       <footer className="foot">
         <div className="wrap foot__grid">
@@ -53,6 +55,6 @@ export default async function LocaleLayout({
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

@@ -139,7 +139,7 @@ export default function Radar({
               ))}
             </ul>
           ) : (
-            <p className="faint" style={{ marginTop: 14, fontSize: 11 }}>
+            <p className="dim" style={{ marginTop: 14, fontSize: 11 }}>
               NO RESOLVED SIGNALS AT THIS NODE.
             </p>
           )}
