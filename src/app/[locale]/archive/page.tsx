@@ -42,6 +42,26 @@ export default async function ArchivePage({
         <p className="page__intro">{dict.archiveIntro}</p>
       </div>
 
+      {/* A plain GET form: it works before, and without, any JavaScript. */}
+      <form
+        action={`/${locale}/search`}
+        className="searchbar searchbar--compact"
+        role="search"
+      >
+        <span className="searchbar__icon" aria-hidden>
+          ⌕
+        </span>
+        <input
+          type="search"
+          name="q"
+          placeholder={dict.searchPlaceholder}
+          aria-label={dict.search}
+        />
+        <button className="btn" type="submit">
+          {dict.search}
+        </button>
+      </form>
+
       <ArchiveGraph locale={locale} />
 
       <ul className="nodes" style={{ marginTop: 26 }}>

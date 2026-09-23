@@ -1322,3 +1322,60 @@ h3 {
 }
 
 .chan__redeclare:hover { color: var(--toxic); }
+
+/* --- search ----------------------------------------------------------- */
+
+.searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line-2);
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.searchbar:focus-within { border-color: var(--toxic); }
+
+.searchbar__icon {
+  font-size: 18px;
+  color: var(--bone-faint);
+}
+
+.searchbar:focus-within .searchbar__icon { color: var(--toxic); }
+
+.searchbar input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  outline: none;
+}
+
+.searchbar input::-webkit-search-cancel-button { filter: invert(0.6); }
+
+.searchbar__count { white-space: nowrap; color: var(--toxic); }
+
+.search__empty { margin-top: 26px; }
+
+.chip { cursor: pointer; }
+
+.hit__mark {
+  background: rgba(182, 255, 0, 0.18);
+  color: var(--toxic);
+  padding: 0 1px;
+}
+
+.hit__from {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--acid);
+}
+
+.hit__from--above { margin: 0 0 6px; }
+
+.searchbar--compact { margin-bottom: 22px; }
+.searchbar--compact input { padding: 12px 0; font-size: 14px; }
+.searchbar--compact .btn { padding: 7px 12px; }

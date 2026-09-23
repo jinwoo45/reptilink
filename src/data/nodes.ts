@@ -28,6 +28,24 @@ export const NODES: NodeCity[] = [
   { id: "unknown", name: "UNKNOWN", country: "??", tz: "???", x: 0.63, y: 0.52, fiction: true },
 ];
 
+/**
+ * What each city is called in the six languages, for search only — the map
+ * keeps one name per node. "서울", "ソウル" and "Seúl" all find SEOUL.
+ */
+export const NODE_ALIASES: Record<string, string[]> = {
+  seoul: ["서울", "ソウル", "seúl", "seul", "โซล"],
+  tokyo: ["도쿄", "東京", "とうきょう", "tóquio", "โตเกียว"],
+  "los-angeles": ["로스앤젤레스", "엘에이", "ロサンゼルス", "los ángeles", "ลอสแอนเจลิส"],
+  "mexico-city": ["멕시코시티", "メキシコシティ", "ciudad de méxico", "cdmx", "cidade do méxico", "เม็กซิโกซิตี"],
+  berlin: ["베를린", "ベルリン", "berlim", "เบอร์ลิน"],
+  bangkok: ["방콕", "バンコク", "กรุงเทพ", "bangcoc", "banguecoque"],
+  "sao-paulo": ["상파울루", "サンパウロ", "sao paulo", "เซาเปาโล"],
+  london: ["런던", "ロンドン", "londres", "ลอนดอน"],
+  jakarta: ["자카르타", "ジャカルタ", "yakarta", "จาการ์ตา"],
+  lima: ["리마", "リマ", "ลิมา"],
+  reykjavik: ["레이캬비크", "レイキャビク", "reikiavik", "reiquiavique", "เรคยาวิก"],
+};
+
 /** Where a reader of each language most likely is. A default, never a location. */
 const DEFAULT_NODE: Record<Locale, string> = {
   ko: "seoul",

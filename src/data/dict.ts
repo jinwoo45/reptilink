@@ -89,6 +89,15 @@ export type Dict = {
   yourNode: string;
   identityDeclared: string;
   redeclare: string;
+  search: string;
+  searchPlaceholder: string;
+  searchIntro: string;
+  searchNotice: string;
+  noResults: string;
+  matchedIn: string;
+  results: string;
+  resultOne: string;
+  tryQueries: string;
 };
 
 const en: Dict = {
@@ -187,6 +196,17 @@ const en: Dict = {
   yourNode: "YOUR NODE",
   identityDeclared: "DECLARED",
   redeclare: "RE-DECLARE",
+  search: "SEARCH",
+  searchPlaceholder: "Search in any language",
+  searchIntro:
+    "Search in your own language, or in anyone else's. Every entry is indexed in every language it exists in, and results come back in yours.",
+  searchNotice:
+    "Runs in your browser over what this build contains. It finds what was written, in whatever language it was written in — it does not translate your query or guess what you meant.",
+  noResults: "No signal matches that. Nothing has been made up to fill the space.",
+  matchedIn: "MATCHED IN",
+  results: "RESULTS",
+  tryQueries: "TRY",
+  resultOne: "RESULT",
 };
 
 const ko: Dict = {
@@ -278,6 +298,17 @@ const ko: Dict = {
   yourNode: "나의 노드",
   identityDeclared: "선언한 정체",
   redeclare: "다시 선언",
+  search: "검색",
+  searchPlaceholder: "어떤 언어로든 검색",
+  searchIntro:
+    "당신의 언어로, 혹은 다른 누구의 언어로든 검색하세요. 모든 항목은 존재하는 모든 언어로 색인되어 있고, 결과는 당신의 언어로 돌아옵니다.",
+  searchNotice:
+    "이 빌드에 들어 있는 내용을 브라우저 안에서 검색합니다. 쓰인 언어 그대로 쓰인 것을 찾을 뿐, 검색어를 번역하거나 뜻을 짐작하지 않습니다.",
+  noResults: "일치하는 신호가 없습니다. 빈자리를 채우려고 지어낸 결과도 없습니다.",
+  matchedIn: "일치한 언어",
+  results: "결과",
+  resultOne: "결과",
+  tryQueries: "예시",
   activeLanguages: "활성 언어",
 };
 
@@ -370,6 +401,17 @@ const ja: Dict = {
   yourNode: "あなたのノード",
   identityDeclared: "申告した正体",
   redeclare: "申告し直す",
+  search: "検索",
+  searchPlaceholder: "どの言語でも検索",
+  searchIntro:
+    "自分の言語でも、他の誰の言語でも検索できます。各項目は存在するすべての言語で索引化され、結果はあなたの言語で返ります。",
+  searchNotice:
+    "このビルドに含まれる内容をブラウザ内で検索します。書かれた言語のまま書かれたものを探すだけで、検索語を翻訳したり意図を推測したりはしません。",
+  noResults: "一致する信号はありません。空白を埋めるために作った結果もありません。",
+  matchedIn: "一致した言語",
+  results: "件",
+  resultOne: "件",
+  tryQueries: "例",
   activeLanguages: "使用言語",
 };
 
@@ -463,6 +505,17 @@ const es: Dict = {
   yourNode: "TU NODO",
   identityDeclared: "DECLARADO",
   redeclare: "VOLVER A DECLARAR",
+  search: "BUSCAR",
+  searchPlaceholder: "Busca en cualquier idioma",
+  searchIntro:
+    "Busca en tu idioma o en el de cualquiera. Cada entrada está indexada en todos los idiomas en que existe, y los resultados vuelven en el tuyo.",
+  searchNotice:
+    "Funciona en tu navegador sobre lo que contiene esta versión. Encuentra lo que se escribió, en el idioma en que se escribió: no traduce tu búsqueda ni adivina lo que quisiste decir.",
+  noResults: "Ninguna señal coincide. No se inventó nada para llenar el hueco.",
+  matchedIn: "COINCIDE EN",
+  results: "RESULTADOS",
+  tryQueries: "PRUEBA",
+  resultOne: "RESULTADO",
   activeLanguages: "IDIOMAS ACTIVOS",
 };
 
@@ -556,6 +609,17 @@ const pt: Dict = {
   yourNode: "SEU NÓ",
   identityDeclared: "DECLARADO",
   redeclare: "DECLARAR DE NOVO",
+  search: "BUSCAR",
+  searchPlaceholder: "Busque em qualquer idioma",
+  searchIntro:
+    "Busque no seu idioma ou no de qualquer outra pessoa. Cada entrada é indexada em todos os idiomas em que existe, e os resultados voltam no seu.",
+  searchNotice:
+    "Roda no seu navegador sobre o que esta versão contém. Encontra o que foi escrito, no idioma em que foi escrito — não traduz a sua busca nem adivinha o que você quis dizer.",
+  noResults: "Nenhum sinal corresponde. Nada foi inventado para preencher o espaço.",
+  matchedIn: "CORRESPONDE EM",
+  results: "RESULTADOS",
+  tryQueries: "TENTE",
+  resultOne: "RESULTADO",
   activeLanguages: "IDIOMAS ATIVOS",
 };
 
@@ -647,6 +711,17 @@ const th: Dict = {
   yourNode: "โหนดของคุณ",
   identityDeclared: "ตัวตนที่ประกาศ",
   redeclare: "ประกาศใหม่",
+  search: "ค้นหา",
+  searchPlaceholder: "ค้นหาด้วยภาษาใดก็ได้",
+  searchIntro:
+    "ค้นหาด้วยภาษาของคุณ หรือภาษาของใครก็ได้ ทุกรายการถูกทำดัชนีไว้ในทุกภาษาที่มี และผลลัพธ์จะกลับมาเป็นภาษาของคุณ",
+  searchNotice:
+    "ทำงานในเบราว์เซอร์ของคุณ บนเนื้อหาที่มีในบิลด์นี้ มันค้นหาสิ่งที่ถูกเขียนไว้ ในภาษาที่มันถูกเขียน ไม่ได้แปลคำค้นหรือเดาความหมาย",
+  noResults: "ไม่มีสัญญาณที่ตรงกัน และไม่มีผลลัพธ์ที่ถูกกุขึ้นมาเติมช่องว่าง",
+  matchedIn: "ตรงกันในภาษา",
+  results: "ผลลัพธ์",
+  resultOne: "ผลลัพธ์",
+  tryQueries: "ลองค้น",
   activeLanguages: "ภาษาที่ใช้งาน",
 };
 

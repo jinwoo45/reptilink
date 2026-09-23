@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { LOCALES, LOCALE_META, type Locale } from "@/lib/i18n";
 import AudioToggle from "./AudioToggle";
 
@@ -13,13 +13,28 @@ const LINKS = [
   { href: "/archive", label: "ARCHIVE" },
   { href: "/channel", label: "CHANNEL" },
   { href: "/scan", label: "INDEX" },
+  { href: "/search", label: "⌕ SEARCH" },
 ];
 
 export default function Nav({ locale }: { locale: Locale }) {
   const pathname = usePathname() || `/${locale}`;
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const rest = pathname.replace(new RegExp(`^/${locale}`), "") || "";
+  const links = useRef<HTMLElement>(null);
+
+  // On narrow screens the links scroll sideways; keep the current one in view.
+  useEffect(() => {
+    const row = links.current;
+    const on = row?.querySelector<HTMLElement>(".nav__link--on");
+    if (!row || !on) return;
+    // Measured against the row itself: offsetLeft would be relative to the
+    // sticky header, not to the scrolling row.
+    const x =
+      on.getBoundingClientRect().left - row.getBoundingClientRect().left + row.scrollLeft;
+    row.scrollTo({ left: x - row.clientWidth / 2 + on.clientWidth / 2 });
+  }, [pathname]);
 
   return (
     <header className="nav">
@@ -28,7 +43,7 @@ export default function Nav({ locale }: { locale: Locale }) {
           REPTILINK
         </Link>
 
-        <nav className="nav__links" aria-label="primary">
+        <nav className="nav__links" aria-label="primary" ref={links}>
           {LINKS.map((l) => {
             const href = `/${locale}${l.href}`;
             const active =
@@ -63,7 +78,15 @@ export default function Nav({ locale }: { locale: Locale }) {
                     <Link
                       href={`/${l}${rest}`}
                       className={l === locale ? "toxic" : undefined}
-                      onClick={() => setOpen(false)}
+                      onClick={(e) => {
+                        setOpen(false);
+                        // Keep the query: a search, or a received scan card,
+                        // should reappear in the new language, not vanish.
+                        if (window.location.search) {
+                          e.preventDefault();
+                          router.push(`/${l}${rest}${window.location.search}`);
+                        }
+                      }}
                     >
                       {LOCALE_META[l].code} · {LOCALE_META[l].native}
                     </Link>

@@ -20,6 +20,7 @@ language, with the original still underneath, one click away, never overwritten.
 | §15–17 The Archive | `/[locale]/archive` | 30 nodes as a knowledge graph, classified |
 | §21 Private Channel | `/[locale]/channel` | A correspondent you share no language with |
 | §22 Reptilian Index | `/[locale]/scan` | Deterministic entertainment scan |
+| §32 Search | `/[locale]/search` | Cross-lingual: any language in, results in yours, with what matched |
 | §24 ARG | `/origin`, 404 | Fiction layer, traceable and stated plainly |
 | §27 Global SEO | all | `hreflang` on every page, localized metadata, sitemap |
 | §28 Sound Design | nav | Silent by default; WebAudio carrier on opt-in |
@@ -45,8 +46,11 @@ backend (§30) is out of scope for a single static deployment, so:
   the UI says so on the page. What it demonstrates is the §21 contract: a
   correspondent whose language you do not share, translated on arrival, with the
   original transmission kept underneath.
-- Case, Encounter and cross-lingual search (§19, §20, §32) are V0.2/V0.3 and are
-  not here.
+- **Search matches text, not meaning.** Every entry is indexed in every language
+  it exists in, so "지하 문명" finds the node whose Spanish title is
+  "Civilización subterránea" — but a phrase that appears in no language is not
+  found. Semantic search is V0.3.
+- Case and Encounter (§19, §20) are V0.2/V0.3 and are not here.
 
 ## The eye
 
