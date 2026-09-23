@@ -10,14 +10,15 @@ import {
   type Locale,
 } from "@/lib/i18n";
 import { getDict } from "@/data/dict";
-import { NODES } from "@/data/nodes";
+import { NODES, defaultNodeFor } from "@/data/nodes";
 import { ARCHIVE } from "@/data/archive";
+import { decodeScan } from "@/data/quiz";
+import { KEYS, readStored, writeStored } from "@/lib/storage";
+import { SPECIES, type Species } from "@/lib/identity";
 import ReptilianEye from "./ReptilianEye";
 
 type Stage = "boot" | "select";
 
-const SPECIES = ["human", "reptilian", "other", "dontKnow"] as const;
-export type Species = (typeof SPECIES)[number];
 
 const BOOT_LINES = [
   "REPTILINK NETWORK",
@@ -25,15 +26,6 @@ const BOOT_LINES = [
   "TRANSLATION NETWORK . ONLINE",
   "CARRIER ............. UNKNOWN ORIGIN",
 ];
-
-const NODE_BY_LOCALE: Record<Locale, string> = {
-  ko: "seoul",
-  ja: "tokyo",
-  es: "mexico-city",
-  pt: "sao-paulo",
-  th: "bangkok",
-  en: "london",
-};
 
 export default function Entry() {
   const router = useRouter();
@@ -47,13 +39,20 @@ export default function Entry() {
   useEffect(() => {
     if (detected.current) return;
     detected.current = true;
-    const stored = window.localStorage.getItem("reptilink:locale");
+    const stored = readStored(KEYS.locale);
     const fromStore = stored && (LOCALES as readonly string[]).includes(stored);
     const next = fromStore
       ? (stored as Locale)
       : matchLocale(navigator.languages ?? [navigator.language]) ?? DEFAULT_LOCALE;
     setLocale(next);
-  }, []);
+
+    // Someone sent a scan. The reason they clicked is that result, so it goes
+    // straight to it — in the recipient's language, not the sharer's (§22).
+    const shared = new URLSearchParams(window.location.search).get("r");
+    if (decodeScan(shared)) {
+      router.replace(`/${next}/scan?r=${shared}`);
+    }
+  }, [router]);
 
   useEffect(() => {
     if (stage !== "boot") return;
@@ -72,14 +71,14 @@ export default function Entry() {
 
   const dict = useMemo(() => getDict(locale), [locale]);
   const node = useMemo(
-    () => NODES.find((n) => n.id === NODE_BY_LOCALE[locale]) ?? NODES[0],
+    () => NODES.find((n) => n.id === defaultNodeFor(locale)) ?? NODES[0],
     [locale]
   );
 
   const enter = useCallback(() => {
     if (!species) return;
-    window.localStorage.setItem("reptilink:locale", locale);
-    window.localStorage.setItem("reptilink:species", species);
+    writeStored(KEYS.locale, locale);
+    writeStored(KEYS.species, species);
     router.push(`/${locale}`);
   }, [locale, species, router]);
 

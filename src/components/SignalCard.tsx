@@ -12,10 +12,12 @@ export default function SignalCard({
   signal,
   locale,
   dict,
+  onRemove,
 }: {
   signal: Signal;
   locale: Locale;
   dict: Dict;
+  onRemove?: () => void;
 }) {
   const [showOriginal, setShowOriginal] = useState(false);
   const t = resolveTranslation(signal.originalLanguage, signal.text, locale);
@@ -27,7 +29,7 @@ export default function SignalCard({
       <header className="sig__head">
         <span className="sig__name">@{signal.codename}</span>
         <span className="mono-label">
-          {node.name} NODE · {signal.time} {node.tz}
+          {node.name} NODE · {signal.time} {signal.tz ?? node.tz}
         </span>
       </header>
 
@@ -82,6 +84,11 @@ export default function SignalCard({
           >
             ▸ {archiveTitle(linked, locale)}
           </Link>
+        )}
+        {onRemove && (
+          <button className="sig__remove" onClick={onRemove}>
+            ✕ {dict.remove}
+          </button>
         )}
       </footer>
     </article>

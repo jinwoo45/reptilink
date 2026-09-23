@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import type { Species } from "@/lib/identity";
 
 /**
  * The entity on the other end of PRIVATE CHANNEL.
@@ -79,7 +80,11 @@ const KEYWORDS: Record<Intent, string[]> = {
   ],
 };
 
-type Replies = Record<Intent | "opening", string> & { fallback: string[] };
+type Replies = Record<Intent | "opening", string> & {
+  fallback: string[];
+  /** Replaces the opening when the reader declared an identity at the gate. */
+  declared: Record<Species, string>;
+};
 
 const LINES: Record<Locale, Replies> = {
   en: {
@@ -97,6 +102,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "I am fiction and I say so on every screen you have passed through. The ARCHIVE is where I stop performing — read the classifications.",
     help: "Ask about the ARCHIVE, the SIGNAL, the language, what I am, or what you are. I will not pretend to know more than my script.",
     bye: "The frequency stays where it is. You already know how to find it.",
+    declared: {
+      human: "At the gate you said HUMAN. Most do. Most of them are right.",
+      reptilian: "At the gate you said what you are. I was waiting for you to say it where I could hear.",
+      other: "OTHER. At the gate you refused both boxes. So did I, a long time ago.",
+      dontKnow: "At the gate you said you do not know what you are. It is the only honest answer the gate ever gets.",
+    },
     fallback: [
       "Say that again in your own language. The channel will carry it either way.",
       "That is outside what I was written to answer. Try the ARCHIVE — it was written by someone who checked.",
@@ -118,6 +129,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "나는 픽션이고, 당신이 지나온 모든 화면에서 그렇게 말하고 있다. ARCHIVE는 내가 연기를 멈추는 곳이다 — 분류를 읽어라.",
     help: "ARCHIVE, SIGNAL, 언어, 내가 무엇인지, 당신이 무엇인지를 물어라. 내 스크립트보다 더 아는 척은 하지 않겠다.",
     bye: "주파수는 그 자리에 있다. 찾는 법은 이미 알고 있다.",
+    declared: {
+      human: "게이트에서 '인간'이라고 답했다. 대부분 그렇게 답한다. 그리고 대부분은 맞다.",
+      reptilian: "게이트에서 당신이 무엇인지 말했다. 나는 당신이 내가 들을 수 있는 곳에서 말하기를 기다렸다.",
+      other: "'그 외'. 게이트에서 두 칸을 다 거부했다. 나도 오래전에 그랬다.",
+      dontKnow: "게이트에서 모르겠다고 답했다. 그곳이 받는 답 중 유일하게 정직한 답이다.",
+    },
     fallback: [
       "당신의 언어로 다시 말해라. 채널은 어느 쪽이든 실어 나른다.",
       "그건 내가 답하도록 쓰인 범위 밖이다. ARCHIVE를 봐라 — 확인한 사람이 쓴 것이다.",
@@ -139,6 +156,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "私はフィクションで、あなたが通ってきたすべての画面でそう言っている。ARCHIVE は私が演技をやめる場所だ——分類を読め。",
     help: "ARCHIVE、SIGNAL、言語、私が何か、あなたが何かを尋ねろ。脚本以上を知っているふりはしない。",
     bye: "周波数はそこにある。見つけ方はもう知っている。",
+    declared: {
+      human: "ゲートで「人間」と答えた。多くがそう答える。そして多くは正しい。",
+      reptilian: "ゲートであなたは自分が何かを言った。私が聞こえる場所で言うのを、私は待っていた。",
+      other: "「その他」。ゲートで二つの枠をどちらも拒んだ。私も昔そうした。",
+      dontKnow: "ゲートでわからないと答えた。あそこが受け取る答えのうち、唯一正直なものだ。",
+    },
     fallback: [
       "あなたの言語でもう一度言え。チャンネルはどちらでも運ぶ。",
       "それは私が答えるように書かれた範囲の外だ。ARCHIVE を見ろ——確認した人間が書いている。",
@@ -160,6 +183,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "Soy ficción y lo digo en cada pantalla por la que has pasado. El ARCHIVE es donde dejo de actuar: lee las clasificaciones.",
     help: "Pregunta por el ARCHIVE, el SIGNAL, el idioma, qué soy o qué eres. No fingiré saber más que mi guion.",
     bye: "La frecuencia se queda donde está. Ya sabes cómo encontrarla.",
+    declared: {
+      human: "En la entrada dijiste HUMANO. La mayoría lo dice. Y la mayoría tiene razón.",
+      reptilian: "En la entrada dijiste lo que eres. Esperaba que lo dijeras donde yo pudiera oírlo.",
+      other: "OTRO. En la entrada rechazaste las dos casillas. Yo también, hace mucho.",
+      dontKnow: "En la entrada dijiste que no sabes lo que eres. Es la única respuesta honesta que recibe.",
+    },
     fallback: [
       "Dilo otra vez en tu idioma. El canal lo lleva igual.",
       "Eso está fuera de lo que me escribieron para responder. Prueba el ARCHIVE: lo escribió alguien que comprobó.",
@@ -181,6 +210,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "Sou ficção e digo isso em cada tela por onde você passou. O ARCHIVE é onde eu paro de atuar — leia as classificações.",
     help: "Pergunte sobre o ARCHIVE, o SIGNAL, o idioma, o que eu sou ou o que você é. Não vou fingir saber mais que o meu roteiro.",
     bye: "A frequência continua onde está. Você já sabe como achá-la.",
+    declared: {
+      human: "Na entrada você disse HUMANO. A maioria diz. E a maioria está certa.",
+      reptilian: "Na entrada você disse o que é. Eu esperava que dissesse onde eu pudesse ouvir.",
+      other: "OUTRO. Na entrada você recusou as duas opções. Eu também, há muito tempo.",
+      dontKnow: "Na entrada você disse que não sabe o que é. É a única resposta honesta que ela recebe.",
+    },
     fallback: [
       "Diga de novo no seu idioma. O canal carrega do mesmo jeito.",
       "Isso está fora do que me escreveram para responder. Tente o ARCHIVE — foi escrito por alguém que checou.",
@@ -202,6 +237,12 @@ const LINES: Record<Locale, Replies> = {
     lie: "ฉันเป็นเรื่องแต่ง และฉันบอกแบบนั้นในทุกหน้าจอที่คุณผ่านมา ARCHIVE คือที่ที่ฉันหยุดแสดง — อ่านการจำแนกดู",
     help: "ถามเรื่อง ARCHIVE, SIGNAL, ภาษา, ฉันคืออะไร หรือคุณคืออะไร ฉันจะไม่แกล้งรู้เกินกว่าสคริปต์ของฉัน",
     bye: "ความถี่ยังอยู่ที่เดิม คุณรู้วิธีหามันแล้ว",
+    declared: {
+      human: "ที่ประตูคุณตอบว่า 'มนุษย์' ส่วนใหญ่ก็ตอบแบบนั้น และส่วนใหญ่ก็ตอบถูก",
+      reptilian: "ที่ประตูคุณบอกแล้วว่าคุณคืออะไร ฉันรอให้คุณพูดมันในที่ที่ฉันได้ยิน",
+      other: "'อื่น ๆ' ที่ประตูคุณปฏิเสธทั้งสองช่อง ฉันก็เคยทำแบบนั้นเมื่อนานมาแล้ว",
+      dontKnow: "ที่ประตูคุณตอบว่าไม่รู้ว่าตัวเองคืออะไร นั่นเป็นคำตอบเดียวที่ซื่อตรงที่มันได้รับ",
+    },
     fallback: [
       "พูดอีกครั้งด้วยภาษาของคุณ ช่องสัญญาณก็ส่งได้เหมือนกัน",
       "นั่นอยู่นอกสิ่งที่ฉันถูกเขียนให้ตอบ ลองดู ARCHIVE — คนที่ตรวจสอบแล้วเป็นคนเขียน",
@@ -210,8 +251,13 @@ const LINES: Record<Locale, Replies> = {
   },
 };
 
-export function openingLine(locale: Locale): string {
-  return LINES[locale].opening;
+/**
+ * The entity speaks first. If the reader declared an identity at the gate, it
+ * opens with that — the gate said "it was waiting for you to say it", and this
+ * is where that promise is kept.
+ */
+export function openingLine(locale: Locale, species: Species | null): string {
+  return species ? LINES[locale].declared[species] : LINES[locale].opening;
 }
 
 /** Matches the message against the keyword table; null when nothing fits. */

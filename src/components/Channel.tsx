@@ -5,6 +5,8 @@ import ReptilianEye from "./ReptilianEye";
 import { LOCALE_META, type Locale } from "@/lib/i18n";
 import type { Dict } from "@/data/dict";
 import { openingLine, reply, toOriginal } from "@/data/entity";
+import { KEYS, readStored } from "@/lib/storage";
+import { isSpecies, type Species } from "@/lib/identity";
 
 type Message = {
   id: number;
@@ -25,12 +27,16 @@ export default function Channel({
   const [draft, setDraft] = useState("");
   const [receiving, setReceiving] = useState(false);
   const [shown, setShown] = useState<number[]>([]);
+  const [species, setSpecies] = useState<Species | null>(null);
   const turn = useRef(0);
   const log = useRef<HTMLDivElement>(null);
 
-  // The channel opens itself; the entity speaks first.
+  // The channel opens itself; the entity speaks first, and remembers the gate.
   useEffect(() => {
-    const text = openingLine(locale);
+    const stored = readStored(KEYS.species);
+    const declared = isSpecies(stored) ? stored : null;
+    setSpecies(declared);
+    const text = openingLine(locale, declared);
     setMessages([{ id: 0, from: "entity", text, original: toOriginal(text) }]);
     turn.current = 0;
     setShown([]);
@@ -69,7 +75,11 @@ export default function Channel({
   return (
     <div className="chan">
       <aside className="chan__side">
-        <ReptilianEye awake={receiving} className="eye--sm" />
+        <ReptilianEye
+          awake={receiving}
+          recognised={species === "reptilian"}
+          className="eye--sm"
+        />
         <p className="gate__status" style={{ marginTop: 14 }}>
           <span className={receiving ? "toxic" : "dim"}>●</span>
           <span className="mono-label">
@@ -92,6 +102,12 @@ export default function Channel({
           <div>
             <dt className="mono-label">YOUR {dict.language}</dt>
             <dd className="toxic">{LOCALE_META[locale].native}</dd>
+          </div>
+          <div>
+            <dt className="mono-label">{dict.identityDeclared}</dt>
+            <dd className={species === "reptilian" ? "acid" : undefined}>
+              {species ? dict[species] : "—"}
+            </dd>
           </div>
         </dl>
         <p className="note" style={{ marginTop: 18 }}>

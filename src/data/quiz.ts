@@ -1,4 +1,5 @@
-import type { Locale } from "@/lib/i18n";
+import { isLocale, type Locale } from "@/lib/i18n";
+import { NODES } from "./nodes";
 
 export type Question = { q: string; a: string[] };
 
@@ -61,3 +62,50 @@ export const CLASSES = [
 
 export const ORIGINS = ["UNDERGROUND", "COASTAL", "ORBITAL", "EARTH NATIVE", "UNKNOWN"] as const;
 export const ELEMENTS = ["NEON", "SALT", "IRON", "STATIC", "ASH"] as const;
+
+export type ScanResult = {
+  index: number;
+  klass: (typeof CLASSES)[number];
+  origin: (typeof ORIGINS)[number];
+  element: (typeof ELEMENTS)[number];
+  hours: string;
+  entityId: string;
+};
+
+/** Same answers, same result — the index is a hash, not a roll. */
+export function scanResult(answers: number[], locale: Locale): ScanResult {
+  const seed = answers.reduce((acc, a, i) => acc + (a + 1) * (i * 7 + 13), 0);
+  const places = NODES.filter((n) => !n.fiction);
+  return {
+    index: 41 + ((seed * 37) % 590) / 10,
+    klass: CLASSES[seed % CLASSES.length],
+    origin: ORIGINS[(seed * 3) % ORIGINS.length],
+    element: ELEMENTS[(seed * 5) % ELEMENTS.length],
+    hours: `0${1 + (seed % 3)}:${String(10 + (seed % 48)).padStart(2, "0")} — 0${
+      4 + (seed % 2)
+    }:${String(10 + ((seed * 3) % 48)).padStart(2, "0")}`,
+    entityId: `${locale.toUpperCase()}-${places[seed % places.length].name.slice(0, 3)}-${String(
+      10000 + ((seed * 971) % 89999)
+    ).slice(0, 5)}`,
+  };
+}
+
+/**
+ * A share code carries the answers and the sharer's language, not the score:
+ * the recipient recomputes the whole card, so it cannot be forged into a
+ * number the scan could never produce. Example: "ko01230".
+ */
+export function encodeScan(locale: Locale, answers: number[]): string {
+  return `${locale}${answers.join("")}`;
+}
+
+export function decodeScan(
+  code: string | null
+): { locale: Locale; answers: number[] } | null {
+  if (!code) return null;
+  const locale = code.slice(0, 2);
+  if (!isLocale(locale)) return null;
+  const digits = code.slice(2);
+  if (digits.length !== QUIZ[locale].length || !/^[0-3]+$/.test(digits)) return null;
+  return { locale, answers: [...digits].map(Number) };
+}

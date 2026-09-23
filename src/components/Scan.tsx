@@ -1,30 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { QUIZ, CLASSES, ORIGINS, ELEMENTS } from "@/data/quiz";
+import { useEffect, useState } from "react";
+import {
+  QUIZ,
+  decodeScan,
+  encodeScan,
+  scanResult,
+  type ScanResult,
+} from "@/data/quiz";
 import { LOCALE_META, type Locale } from "@/lib/i18n";
 import type { Dict } from "@/data/dict";
-import { NODES } from "@/data/nodes";
 
-type Phase = "intro" | "asking" | "scanning" | "result";
-
-/** Same answers, same result — the index is a hash, not a roll. */
-function compute(answers: number[], locale: Locale) {
-  const seed = answers.reduce((acc, a, i) => acc + (a + 1) * (i * 7 + 13), 0);
-  const index = 41 + ((seed * 37) % 590) / 10;
-  return {
-    index,
-    klass: CLASSES[seed % CLASSES.length],
-    origin: ORIGINS[(seed * 3) % ORIGINS.length],
-    element: ELEMENTS[(seed * 5) % ELEMENTS.length],
-    hours: `0${1 + (seed % 3)}:${String(10 + (seed % 48)).padStart(2, "0")} — 0${
-      4 + (seed % 2)
-    }:${String(10 + ((seed * 3) % 48)).padStart(2, "0")}`,
-    entityId: `${locale.toUpperCase()}-${
-      NODES[seed % (NODES.length - 1)].name.slice(0, 3)
-    }-${String(10000 + ((seed * 971) % 89999)).slice(0, 5)}`,
-  };
-}
+type Phase = "intro" | "asking" | "scanning" | "result" | "received";
 
 export default function Scan({
   locale,
@@ -38,11 +25,21 @@ export default function Scan({
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [copied, setCopied] = useState(false);
+  const [received, setReceived] = useState<{
+    locale: Locale;
+    result: ScanResult;
+  } | null>(null);
 
-  const result = useMemo(
-    () => (answers.length === questions.length ? compute(answers, locale) : null),
-    [answers, questions.length, locale]
-  );
+  // Arrived from someone's share link: show their card before anything else.
+  useEffect(() => {
+    const shared = decodeScan(new URLSearchParams(window.location.search).get("r"));
+    if (!shared) return;
+    setReceived({
+      locale: shared.locale,
+      result: scanResult(shared.answers, shared.locale),
+    });
+    setPhase("received");
+  }, []);
 
   function answer(i: number) {
     const next = [...answers, i];
@@ -55,11 +52,49 @@ export default function Scan({
     }
   }
 
-  function reset() {
+  function begin() {
     setAnswers([]);
     setStep(0);
     setCopied(false);
     setPhase("asking");
+    // Leaving the received card behind: a reload should start the reader's own scan.
+    if (window.location.search) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }
+
+  async function share() {
+    const url = `${window.location.origin}/?r=${encodeScan(locale, answers)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  if (phase === "received" && received) {
+    return (
+      <div className="panel pad scan" data-depth="3">
+        <p className="mono-label acid">{dict.receivedScan}</p>
+        <p className="dim" style={{ marginTop: 10, maxWidth: "56ch" }}>
+          {dict.receivedNote}
+        </p>
+        <ResultCard
+          result={received.result}
+          language={received.locale}
+          dict={dict}
+        />
+        <div className="scan__actions">
+          <button className="btn gate__enter--ready" onClick={begin}>
+            {dict.startScan} <span className="caret" />
+          </button>
+        </div>
+        <p className="note" style={{ marginTop: 26 }}>
+          {dict.scanIntro}
+        </p>
+      </div>
+    );
   }
 
   if (phase === "intro") {
@@ -68,7 +103,7 @@ export default function Scan({
         <p className="dim" style={{ maxWidth: "58ch" }}>
           {dict.scanIntro}
         </p>
-        <button className="btn" style={{ marginTop: 20 }} onClick={() => setPhase("asking")}>
+        <button className="btn" style={{ marginTop: 20 }} onClick={begin}>
           {dict.startScan} <span className="caret" />
         </button>
       </div>
@@ -98,7 +133,7 @@ export default function Scan({
     );
   }
 
-  if (phase === "scanning" || !result) {
+  if (phase === "scanning" || answers.length !== questions.length) {
     return (
       <div className="panel pad scan" aria-live="polite">
         <p className="mono-label">{dict.scanning}</p>
@@ -109,11 +144,38 @@ export default function Scan({
     );
   }
 
-  const filled = Math.round((result.index / 100) * 19);
-
   return (
     <div className="panel pad scan" data-depth="3">
       <p className="mono-label">{dict.scanComplete}</p>
+      <ResultCard result={scanResult(answers, locale)} language={locale} dict={dict} />
+      <div className="scan__actions">
+        <button className="btn" onClick={share}>
+          {copied ? dict.copied : dict.shareCard}
+        </button>
+        <button className="btn btn--ghost" onClick={begin}>
+          {dict.rescan}
+        </button>
+      </div>
+      <p className="note" style={{ marginTop: 26 }}>
+        {dict.scanIntro}
+      </p>
+    </div>
+  );
+}
+
+function ResultCard({
+  result,
+  language,
+  dict,
+}: {
+  result: ScanResult;
+  /** The language the scan was answered in — the sharer's, on a received card. */
+  language: Locale;
+  dict: Dict;
+}) {
+  const filled = Math.round((result.index / 100) * 19);
+  return (
+    <>
       <p className="mono-label" style={{ marginTop: 22 }}>
         REPTILIAN INDEX
       </p>
@@ -144,38 +206,13 @@ export default function Scan({
         </div>
         <div>
           <dt className="mono-label">{dict.language}</dt>
-          <dd>{LOCALE_META[locale].native}</dd>
+          <dd>{LOCALE_META[language].native}</dd>
         </div>
         <div>
           <dt className="mono-label">{dict.entityId}</dt>
           <dd className="toxic">{result.entityId}</dd>
         </div>
       </dl>
-
-      <div className="scan__actions">
-        <button
-          className="btn"
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(
-                `${window.location.origin}/?index=${result.index.toFixed(1)}`
-              );
-              setCopied(true);
-            } catch {
-              setCopied(false);
-            }
-          }}
-        >
-          {copied ? dict.copied : dict.shareCard}
-        </button>
-        <button className="btn btn--ghost" onClick={reset}>
-          {dict.rescan}
-        </button>
-      </div>
-
-      <p className="note" style={{ marginTop: 26 }}>
-        {dict.scanIntro}
-      </p>
-    </div>
+    </>
   );
 }

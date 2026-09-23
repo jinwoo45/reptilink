@@ -83,6 +83,11 @@ export type Dict = {
   receiving: string;
   you: string;
   clearChannel: string;
+  receivedScan: string;
+  receivedNote: string;
+  remove: string;
+  yourNode: string;
+  identityDeclared: string;
 };
 
 const en: Dict = {
@@ -116,7 +121,7 @@ const en: Dict = {
   composePlaceholder: "Write in your own language. The network handles the rest.",
   transmit: "TRANSMIT",
   localDemoNote:
-    "Demo build — your SIGNAL stays in this browser session and is not sent anywhere.",
+    "Demo build — your SIGNALs are kept in this browser only. Nothing is sent anywhere, and nobody else can see them.",
   radarIntro:
     "Activity is aggregated to city level only. REPTILINK never plots an individual position.",
   archiveIntro:
@@ -175,6 +180,11 @@ const en: Dict = {
   receiving: "RECEIVING",
   you: "YOU",
   clearChannel: "CLOSE CHANNEL",
+  receivedScan: "SOMEONE SENT YOU THEIR SCAN",
+  receivedNote: "They answered in their language. You are reading their result in yours.",
+  remove: "REMOVE",
+  yourNode: "YOUR NODE",
+  identityDeclared: "DECLARED",
 };
 
 const ko: Dict = {
@@ -208,7 +218,7 @@ const ko: Dict = {
   composePlaceholder: "당신의 언어로 쓰세요. 나머지는 네트워크가 처리합니다.",
   transmit: "송출",
   localDemoNote:
-    "데모 빌드입니다 — 작성한 SIGNAL은 이 브라우저 세션에만 남고 어디로도 전송되지 않습니다.",
+    "데모 빌드입니다 — 작성한 SIGNAL은 이 브라우저에만 저장됩니다. 어디로도 전송되지 않고, 다른 사람은 볼 수 없습니다.",
   radarIntro:
     "활동은 도시 단위로만 집계됩니다. REPTILINK는 개인의 위치를 표시하지 않습니다.",
   archiveIntro:
@@ -260,6 +270,11 @@ const ko: Dict = {
   receiving: "수신 중",
   you: "당신",
   clearChannel: "채널 닫기",
+  receivedScan: "누군가 당신에게 스캔 결과를 보냈다",
+  receivedNote: "그 사람은 자기 언어로 답했습니다. 당신은 그 결과를 당신의 언어로 읽고 있습니다.",
+  remove: "삭제",
+  yourNode: "나의 노드",
+  identityDeclared: "선언한 정체",
   activeLanguages: "활성 언어",
 };
 
@@ -294,7 +309,7 @@ const ja: Dict = {
   composePlaceholder: "あなたの言語で書いてください。あとはネットワークが処理します。",
   transmit: "送信",
   localDemoNote:
-    "デモビルドです — 書いた SIGNAL はこのブラウザ内に留まり、どこにも送信されません。",
+    "デモビルドです — 書いた SIGNAL はこのブラウザにのみ保存されます。どこにも送信されず、他の人には見えません。",
   radarIntro:
     "活動は都市単位でのみ集計されます。REPTILINK が個人の位置を示すことはありません。",
   archiveIntro:
@@ -346,6 +361,11 @@ const ja: Dict = {
   receiving: "受信中",
   you: "あなた",
   clearChannel: "チャンネルを閉じる",
+  receivedScan: "誰かがあなたにスキャン結果を送った",
+  receivedNote: "その人は自分の言語で答えました。あなたはその結果を自分の言語で読んでいます。",
+  remove: "削除",
+  yourNode: "あなたのノード",
+  identityDeclared: "申告した正体",
   activeLanguages: "使用言語",
 };
 
@@ -380,7 +400,7 @@ const es: Dict = {
   composePlaceholder: "Escribe en tu idioma. La red se encarga del resto.",
   transmit: "TRANSMITIR",
   localDemoNote:
-    "Versión de demostración: tu SIGNAL se queda en esta sesión del navegador y no se envía a ningún sitio.",
+    "Versión de demostración: tus SIGNAL se guardan solo en este navegador. No se envían a ningún sitio y nadie más puede verlos.",
   radarIntro:
     "La actividad se agrega solo a nivel de ciudad. REPTILINK nunca ubica a una persona.",
   archiveIntro:
@@ -433,6 +453,11 @@ const es: Dict = {
   receiving: "RECIBIENDO",
   you: "TÚ",
   clearChannel: "CERRAR CANAL",
+  receivedScan: "ALGUIEN TE ENVIÓ SU ESCANEO",
+  receivedNote: "Respondió en su idioma. Tú estás leyendo su resultado en el tuyo.",
+  remove: "ELIMINAR",
+  yourNode: "TU NODO",
+  identityDeclared: "DECLARADO",
   activeLanguages: "IDIOMAS ACTIVOS",
 };
 
@@ -467,7 +492,7 @@ const pt: Dict = {
   composePlaceholder: "Escreva no seu idioma. A rede cuida do resto.",
   transmit: "TRANSMITIR",
   localDemoNote:
-    "Versão de demonstração: seu SIGNAL fica nesta sessão do navegador e não é enviado a lugar nenhum.",
+    "Versão de demonstração: seus SIGNAL ficam salvos só neste navegador. Nada é enviado e ninguém mais pode vê-los.",
   radarIntro:
     "A atividade é agregada apenas por cidade. A REPTILINK nunca marca a posição de uma pessoa.",
   archiveIntro:
@@ -520,6 +545,11 @@ const pt: Dict = {
   receiving: "RECEBENDO",
   you: "VOCÊ",
   clearChannel: "FECHAR CANAL",
+  receivedScan: "ALGUÉM TE ENVIOU O ESCANEAMENTO",
+  receivedNote: "A pessoa respondeu no idioma dela. Você está lendo o resultado no seu.",
+  remove: "REMOVER",
+  yourNode: "SEU NÓ",
+  identityDeclared: "DECLARADO",
   activeLanguages: "IDIOMAS ATIVOS",
 };
 
@@ -554,7 +584,7 @@ const th: Dict = {
   composePlaceholder: "เขียนด้วยภาษาของคุณ ที่เหลือเครือข่ายจัดการเอง",
   transmit: "ส่ง",
   localDemoNote:
-    "เวอร์ชันทดลอง — SIGNAL ของคุณอยู่ในเบราว์เซอร์นี้เท่านั้น และไม่ถูกส่งไปที่ใด",
+    "เวอร์ชันทดลอง — SIGNAL ของคุณถูกเก็บไว้ในเบราว์เซอร์นี้เท่านั้น ไม่ถูกส่งไปที่ใด และไม่มีใครอื่นเห็น",
   radarIntro:
     "กิจกรรมถูกรวมในระดับเมืองเท่านั้น REPTILINK ไม่เคยระบุตำแหน่งของบุคคล",
   archiveIntro: "ARCHIVE ไม่ใช่รายการเอกสาร แต่เป็นกราฟ เดินตามเส้นเชื่อม",
@@ -605,6 +635,11 @@ const th: Dict = {
   receiving: "กำลังรับ",
   you: "คุณ",
   clearChannel: "ปิดช่องสัญญาณ",
+  receivedScan: "มีคนส่งผลสแกนของเขามาให้คุณ",
+  receivedNote: "เขาตอบด้วยภาษาของเขา คุณกำลังอ่านผลลัพธ์ด้วยภาษาของคุณ",
+  remove: "ลบ",
+  yourNode: "โหนดของคุณ",
+  identityDeclared: "ตัวตนที่ประกาศ",
   activeLanguages: "ภาษาที่ใช้งาน",
 };
 

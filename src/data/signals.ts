@@ -6,6 +6,10 @@ export type Signal = {
   node: string;
   time: string;
   originalLanguage: Locale;
+  /** Set on a reader's own signal: their real clock, not the node's zone. */
+  tz?: string;
+  /** Written by the viewer in this browser. */
+  mine?: true;
   archive?: string;
   text: Partial<Record<Locale, string>>;
 };

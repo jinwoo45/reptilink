@@ -28,6 +28,20 @@ export const NODES: NodeCity[] = [
   { id: "unknown", name: "UNKNOWN", country: "??", tz: "???", x: 0.63, y: 0.52, fiction: true },
 ];
 
+/** Where a reader of each language most likely is. A default, never a location. */
+const DEFAULT_NODE: Record<Locale, string> = {
+  ko: "seoul",
+  ja: "tokyo",
+  es: "mexico-city",
+  pt: "sao-paulo",
+  th: "bangkok",
+  en: "london",
+};
+
+export function defaultNodeFor(locale: Locale): string {
+  return DEFAULT_NODE[locale];
+}
+
 export const NODES_BY_ID: Record<string, NodeCity> = Object.fromEntries(
   NODES.map((n) => [n.id, n])
 );
