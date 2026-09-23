@@ -88,6 +88,7 @@ export type Dict = {
   remove: string;
   yourNode: string;
   identityDeclared: string;
+  redeclare: string;
 };
 
 const en: Dict = {
@@ -185,6 +186,7 @@ const en: Dict = {
   remove: "REMOVE",
   yourNode: "YOUR NODE",
   identityDeclared: "DECLARED",
+  redeclare: "RE-DECLARE",
 };
 
 const ko: Dict = {
@@ -275,6 +277,7 @@ const ko: Dict = {
   remove: "삭제",
   yourNode: "나의 노드",
   identityDeclared: "선언한 정체",
+  redeclare: "다시 선언",
   activeLanguages: "활성 언어",
 };
 
@@ -366,6 +369,7 @@ const ja: Dict = {
   remove: "削除",
   yourNode: "あなたのノード",
   identityDeclared: "申告した正体",
+  redeclare: "申告し直す",
   activeLanguages: "使用言語",
 };
 
@@ -458,6 +462,7 @@ const es: Dict = {
   remove: "ELIMINAR",
   yourNode: "TU NODO",
   identityDeclared: "DECLARADO",
+  redeclare: "VOLVER A DECLARAR",
   activeLanguages: "IDIOMAS ACTIVOS",
 };
 
@@ -550,6 +555,7 @@ const pt: Dict = {
   remove: "REMOVER",
   yourNode: "SEU NÓ",
   identityDeclared: "DECLARADO",
+  redeclare: "DECLARAR DE NOVO",
   activeLanguages: "IDIOMAS ATIVOS",
 };
 
@@ -640,6 +646,7 @@ const th: Dict = {
   remove: "ลบ",
   yourNode: "โหนดของคุณ",
   identityDeclared: "ตัวตนที่ประกาศ",
+  redeclare: "ประกาศใหม่",
   activeLanguages: "ภาษาที่ใช้งาน",
 };
 

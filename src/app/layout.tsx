@@ -10,12 +10,15 @@ export const metadata: Metadata = {
   description:
     "A multilingual underground network for the world's strangest stories. Write in your language, read the world in yours.",
   applicationName: "REPTILINK",
+  // Pages outside a locale (/origin) fall back to this; locale pages carry
+  // their own localized card via [locale]/opengraph-image.
   openGraph: {
     type: "website",
     siteName: "REPTILINK",
     title: "REPTILINK — EVERY LANGUAGE. SAME SIGNAL.",
     description:
       "A multilingual underground network for the world's strangest stories.",
+    images: [{ url: "/og", width: 1200, height: 630, alt: "REPTILINK" }],
   },
   twitter: { card: "summary_large_image" },
   manifest: "/manifest.webmanifest",

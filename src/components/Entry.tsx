@@ -14,11 +14,10 @@ import { NODES, defaultNodeFor } from "@/data/nodes";
 import { ARCHIVE } from "@/data/archive";
 import { decodeScan } from "@/data/quiz";
 import { KEYS, readStored, writeStored } from "@/lib/storage";
-import { SPECIES, type Species } from "@/lib/identity";
+import { SPECIES, isSpecies, type Species } from "@/lib/identity";
 import ReptilianEye from "./ReptilianEye";
 
-type Stage = "boot" | "select";
-
+type Stage = "boot" | "select" | "return";
 
 const BOOT_LINES = [
   "REPTILINK NETWORK",
@@ -46,13 +45,30 @@ export default function Entry() {
       : matchLocale(navigator.languages ?? [navigator.language]) ?? DEFAULT_LOCALE;
     setLocale(next);
 
+    const params = new URLSearchParams(window.location.search);
+
     // Someone sent a scan. The reason they clicked is that result, so it goes
     // straight to it — in the recipient's language, not the sharer's (§22).
-    const shared = new URLSearchParams(window.location.search).get("r");
+    const shared = params.get("r");
     if (decodeScan(shared)) {
       router.replace(`/${next}/scan?r=${shared}`);
+      return;
+    }
+
+    // Already declared at a previous visit: the gate has had its answer. A
+    // short reconnect, then straight in. ?gate reopens it on purpose.
+    const declared = readStored(KEYS.species);
+    if (fromStore && isSpecies(declared) && !params.has("gate")) {
+      setSpecies(declared);
+      setStage("return");
     }
   }, [router]);
+
+  useEffect(() => {
+    if (stage !== "return") return;
+    const id = window.setTimeout(() => router.replace(`/${locale}`), 1100);
+    return () => window.clearTimeout(id);
+  }, [stage, locale, router]);
 
   useEffect(() => {
     if (stage !== "boot") return;
@@ -84,6 +100,31 @@ export default function Entry() {
 
   const recognised = species === "reptilian";
   const bars = Math.round((Math.min(progress, 100) / 100) * 18);
+
+  if (stage === "return" && species) {
+    return (
+      <main className="entry grid-lines">
+        <div className="entry__inner">
+          <section aria-live="polite">
+            <pre className="entry__boot flicker">
+              {[
+                "REPTILINK NETWORK",
+                "RECONNECTING ........ OK",
+                `ENTITY .............. ${dict[species]}`,
+                `LANGUAGE ............ ${LOCALE_META[locale].native}`,
+              ].join("\n")}
+            </pre>
+            <p className="entry__bar">
+              <span className={species === "reptilian" ? "acid" : "toxic"}>
+                ● {species === "reptilian" ? "ENTITY RECOGNISED" : "CONTACT ESTABLISHED"}
+              </span>
+            </p>
+          </section>
+        </div>
+        <Foot tagline={dict.taglineAlt} />
+      </main>
+    );
+  }
 
   if (stage === "boot") {
     return (

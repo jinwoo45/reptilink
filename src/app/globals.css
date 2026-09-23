@@ -1303,3 +1303,22 @@ h3 {
 }
 
 .sig__remove:hover { color: var(--red); }
+
+.chan__foot {
+  border-top: 1px solid var(--line);
+  padding: 8px 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chan__foot .btn--ghost { font-size: 10px; }
+.chan__foot .btn--ghost:hover { color: var(--red); }
+
+.chan__redeclare {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--bone-faint);
+  white-space: nowrap;
+}
+
+.chan__redeclare:hover { color: var(--toxic); }

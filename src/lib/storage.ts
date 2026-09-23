@@ -23,4 +23,5 @@ export const KEYS = {
   locale: "reptilink:locale",
   species: "reptilink:species",
   signals: "reptilink:signals",
+  channel: "reptilink:channel",
 } as const;

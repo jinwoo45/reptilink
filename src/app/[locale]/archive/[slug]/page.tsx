@@ -43,10 +43,24 @@ export async function generateMetadata({
     title: t.value.title,
     description: t.value.summary,
     alternates: localeAlternates(locale, `/archive/${slug}`),
+    // Declaring openGraph here replaces the locale card, so the image is
+    // declared too: this node's own card, in the reader's language.
     openGraph: {
       title: `${t.value.title} — REPTILINK`,
       description: t.value.summary,
       locale,
+      images: [
+        {
+          url: `/og?node=${node.slug}&lang=${locale}`,
+          width: 1200,
+          height: 630,
+          alt: t.value.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [`/og?node=${node.slug}&lang=${locale}`],
     },
   };
 }

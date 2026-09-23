@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n";
-import type { Species } from "@/lib/identity";
+import { isSpecies, type Species } from "@/lib/identity";
 
 /**
  * The entity on the other end of PRIVATE CHANNEL.
@@ -252,12 +252,23 @@ const LINES: Record<Locale, Replies> = {
 };
 
 /**
+ * What the entity said, independent of any language. The channel stores these,
+ * not text, so a conversation survives a language switch: every line is
+ * re-rendered in the reader's current language, like any cached translation.
+ */
+export type EntityLine =
+  | { kind: "opening" }
+  | { kind: "declared"; species: Species }
+  | { kind: "intent"; intent: Intent }
+  | { kind: "fallback"; n: number };
+
+/**
  * The entity speaks first. If the reader declared an identity at the gate, it
  * opens with that — the gate said "it was waiting for you to say it", and this
  * is where that promise is kept.
  */
-export function openingLine(locale: Locale, species: Species | null): string {
-  return species ? LINES[locale].declared[species] : LINES[locale].opening;
+export function openingFor(species: Species | null): EntityLine {
+  return species ? { kind: "declared", species } : { kind: "opening" };
 }
 
 /** Matches the message against the keyword table; null when nothing fits. */
@@ -269,16 +280,51 @@ export function detectIntent(message: string): Intent | null {
   return null;
 }
 
-export function reply(
-  message: string,
-  locale: Locale,
-  turn: number
-): { text: string; intent: Intent | null } {
+export function respond(message: string, turn: number): EntityLine {
   const intent = detectIntent(message);
+  if (intent) return { kind: "intent", intent };
+  return { kind: "fallback", n: turn % LINES.en.fallback.length };
+}
+
+export function lineText(line: EntityLine, locale: Locale): string {
   const lines = LINES[locale];
-  if (intent) return { text: lines[intent], intent };
-  const pool = lines.fallback;
-  return { text: pool[turn % pool.length], intent: null };
+  switch (line.kind) {
+    case "opening":
+      return lines.opening;
+    case "declared":
+      return lines.declared[line.species];
+    case "intent":
+      return lines[line.intent];
+    case "fallback":
+      return lines.fallback[line.n % lines.fallback.length];
+  }
+}
+
+/**
+ * The untranslated transmission. Derived from one fixed source, so the
+ * original is the same for every reader in every language — only the
+ * translation above it changes.
+ */
+export function lineOriginal(line: EntityLine): string {
+  return toOriginal(lineText(line, "en"));
+}
+
+/** Stored lines are untrusted; only well-formed ones are replayed. */
+export function isEntityLine(v: unknown): v is EntityLine {
+  if (!v || typeof v !== "object") return false;
+  const line = v as Record<string, unknown>;
+  switch (line.kind) {
+    case "opening":
+      return true;
+    case "declared":
+      return isSpecies(line.species);
+    case "intent":
+      return typeof line.intent === "string" && line.intent in KEYWORDS;
+    case "fallback":
+      return Number.isInteger(line.n) && (line.n as number) >= 0;
+    default:
+      return false;
+  }
 }
 
 const GLYPHS = "⌁⍜⎔⏃⏀⌖⍾⎋⌬⏁⍨⌇⌸⎌⍙⌰⏚⌾⍚⎑⌿⍧⏆⌻";
@@ -288,7 +334,7 @@ const GLYPHS = "⌁⍜⎔⏃⏀⌖⍾⎋⌬⏁⍨⌇⌸⎌⍙⌰⏚⌾⍚⎑⌿�
  * the same thing every time you open it — an original that was never discarded,
  * even when nobody can read it.
  */
-export function toOriginal(text: string): string {
+function toOriginal(text: string): string {
   let out = "";
   for (const ch of text) {
     if (ch === " ") out += " ";
