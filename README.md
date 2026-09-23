@@ -75,6 +75,12 @@ that label actually claims. An entry marked CONSPIRACY is marked that way
 because the evidence does not support it. Nothing on the site impersonates a
 real agency or a real disclosure; `/origin` states this in plain language.
 
+## User scenarios
+
+[`docs/USER_SCENARIOS.md`](docs/USER_SCENARIOS.md) walks six personas through the
+current build step by step, marks where each journey works and where it breaks,
+and ranks what to fix.
+
 ## Run it
 
 ```bash
