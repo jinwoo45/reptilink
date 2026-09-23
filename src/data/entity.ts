@@ -20,29 +20,67 @@ import { resolveTranslation } from "@/lib/i18n";
  */
 
 export type Intent =
+  | "bye"
   | "greeting"
+  | "thanks"
+  | "aliens"
+  | "government"
+  | "proof"
+  | "believe"
+  | "dream"
   | "identity"
   | "real"
   | "location"
   | "want"
   | "me"
+  | "humans"
   | "language"
   | "archive"
   | "signal"
   | "fear"
   | "lie"
-  | "help"
-  | "bye";
+  | "help";
 
 /**
  * One table for every language. Keywords from different languages do not
  * collide, so there is no reason to split them.
+ *
+ * Order is priority, first match wins: specific subjects come before generic
+ * ones, so "외계인은 진짜 있어?" is about aliens, not about whether the entity
+ * is real. Short Latin keywords carry a leading space where they would
+ * otherwise match inside other words ("they", "believe", "special").
  */
 const KEYWORDS: Record<Intent, string[]> = {
-  greeting: [
-    "hello", "hi ", "hey", "good evening", "안녕", "여보세요", "こんにちは",
-    "こんばんは", "もしもし", "hola", "buenas", "olá", "ola ", "oi ", "สวัสดี",
+  bye: [
+    "bye", "goodbye", "see you", "잘 가", "잘가", "안녕히", "さようなら",
+    "またね", "adiós", "adios", "chau", "tchau", "adeus", "ลาก่อน", "บาย",
   ],
+  greeting: [
+    "hello", " hi ", " hey", "good evening", "안녕", "여보세요", "こんにちは",
+    "こんばんは", "もしもし", "hola", "buenas", "olá", " ola ", " oi ", "สวัสดี",
+  ],
+  thanks: [
+    "thank", " thx", "고마워", "고맙", "감사", "ありがとう", "感謝", "gracias",
+    "obrigad", "ขอบคุณ",
+  ],
+  aliens: [
+    "alien", "extraterrestrial", "외계", "宇宙人", "エイリアン", "異星人",
+    "extraterrestre", "alienígena", "alienigena", "เอเลี่ยน", "มนุษย์ต่างดาว",
+  ],
+  government: [
+    "government", " cia", " fbi", " nasa", "military", "cover-up", "cover up",
+    "coverup", "정부", "국가가", "은폐", "政府", "隠蔽", "gobierno", "encubr",
+    "governo", "encobr", "รัฐบาล", "ปกปิด",
+  ],
+  proof: [
+    "proof", "evidence", " prove", "증거", "증명", "証拠", "証明", "prueba",
+    "evidencia", "prova", "evidência", "หลักฐาน", "พิสูจน์",
+  ],
+  believe: [
+    "believe", "믿어", "믿니", "믿냐", "믿는", "信じ", "crees", "creer",
+    "acredita", "เชื่อ",
+  ],
+  dream: ["dream", "꿈", "夢", "sueño", "soñ", "sonho", "sonhei", "ฝัน"],
   identity: [
     "who are you", "who r u", "what are you", "your name", "누구", "정체",
     "이름이", "誰", "だれ", "名前", "quién eres", "quien eres", "qué eres",
@@ -64,9 +102,13 @@ const KEYWORDS: Record<Intent, string[]> = {
     "ต้องการอะไร", "ทำไม",
   ],
   me: [
-    "what am i", "am i", "who am i", "나는 뭐", "나는 무엇", "내가 뭐",
+    "what am i", " am i", "who am i", "나는 뭐", "나는 무엇", "내가 뭐",
     "나도", "私は", "僕は", "俺は", "qué soy", "que soy", "soy un",
     "o que eu sou", "eu sou", "ฉันคือ", "ผมคือ",
+  ],
+  humans: [
+    "human", "people", "인간", "사람들", "人間", "人類", "humano", "humanidad",
+    "humanidade", "มนุษย์",
   ],
   language: [
     "language", "translat", "언어", "번역", "言語", "翻訳", "idioma",
@@ -79,14 +121,10 @@ const KEYWORDS: Record<Intent, string[]> = {
     "asusta", "medo", "กลัว",
   ],
   lie: [
-    "lying", "lie", "fake", "bullshit", "거짓", "가짜", "뻥", "嘘", "うそ",
-    "偽", "mientes", "mentira", "falso", "โกหก", "ปลอม",
+    "lying", " lie", "liar", "fake", "bullshit", "거짓", "가짜", "뻥", "嘘",
+    "うそ", "偽", "mientes", "mentira", "falso", "โกหก", "ปลอม",
   ],
   help: ["help", "도와", "도움", "助け", "たすけ", "ayuda", "ajuda", "ช่วย"],
-  bye: [
-    "bye", "goodbye", "see you", "잘 가", "잘가", "안녕히", "さようなら",
-    "またね", "adiós", "adios", "chau", "tchau", "adeus", "ลาก่อน", "บาย",
-  ],
 };
 
 type Replies = Record<Intent | "opening" | "declined", string> & {
@@ -111,6 +149,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "I am fiction and I say so on every screen you have passed through. The ARCHIVE is where I stop performing — read the classifications.",
     help: "Ask about the ARCHIVE, the SIGNAL, the language, what I am, or what you are. I will not pretend to know more than my script.",
     bye: "The frequency stays where it is. You already know how to find it.",
+    thanks: "Noted. Gratitude travels well on this frequency — it needs no translation.",
+    aliens: "Life elsewhere is likely; visitors are not shown. Every sighting so far has resolved into aircraft, weather, or not enough data — which is not the same as nothing.",
+    government: "Governments do hide things — MKUltra and Project Mogul were real, and admitted. What they have not hidden is a spacecraft. The secrecy is documented; the saucer is not.",
+    proof: "Before you ask for proof, ask what would change your mind. A claim that survives every possible answer was never testing anything.",
+    believe: "I do not believe. I keep records. Belief is what humans do in the gap between a question and its answer.",
+    dream: "Many signals on this network began as dreams. A dream is data about the dreamer, not about the world — but it is still data. Write it down on the SIGNAL feed.",
+    humans: "You tell the same stories on every continent — serpents under the water, lights in the sky, a hidden hand. That is what interests me about humans: not what you see, but that you all see it.",
     declined: "That is one I will not answer. Ask me something else — there is a great deal else.",
     declared: {
       human: "At the gate you said HUMAN. Most do. Most of them are right.",
@@ -139,6 +184,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "나는 픽션이고, 당신이 지나온 모든 화면에서 그렇게 말하고 있다. ARCHIVE는 내가 연기를 멈추는 곳이다 — 분류를 읽어라.",
     help: "ARCHIVE, SIGNAL, 언어, 내가 무엇인지, 당신이 무엇인지를 물어라. 내 스크립트보다 더 아는 척은 하지 않겠다.",
     bye: "주파수는 그 자리에 있다. 찾는 법은 이미 알고 있다.",
+    thanks: "기록했다. 고마움은 이 주파수에서 잘 전달된다 — 번역이 필요 없으니까.",
+    aliens: "다른 곳에 생명이 있을 가능성은 높다. 방문했다는 증거는 없다. 지금까지의 목격은 전부 항공기, 기상 현상, 혹은 판단하기에 부족한 자료로 끝났다 — 부족하다는 것과 없다는 것은 다르지만.",
+    government: "정부는 실제로 숨긴다 — MKUltra와 모굴 계획은 실재했고, 인정됐다. 숨겨지지 않은 건 우주선이다. 비밀은 기록으로 남아 있지만, 원반은 그렇지 않다.",
+    proof: "증거를 묻기 전에, 무엇이 당신의 생각을 바꿀지 먼저 물어라. 어떤 답에도 살아남는 주장은 처음부터 아무것도 시험하지 않은 것이다.",
+    believe: "나는 믿지 않는다. 기록할 뿐이다. 믿음은 인간이 질문과 답 사이의 빈틈에서 하는 일이다.",
+    dream: "이 네트워크의 많은 신호는 꿈에서 시작됐다. 꿈은 세계가 아니라 꿈꾼 사람에 대한 자료다 — 그래도 자료는 자료다. SIGNAL 피드에 적어 둬라.",
+    humans: "당신들은 모든 대륙에서 같은 이야기를 한다 — 물 밑의 뱀, 하늘의 빛, 보이지 않는 손. 내가 인간에게 흥미를 느끼는 건 그것이다. 무엇을 보느냐가 아니라, 모두가 그것을 본다는 것.",
     declined: "그건 답하지 않겠다. 다른 걸 물어라 — 물을 건 아직 많다.",
     declared: {
       human: "게이트에서 '인간'이라고 답했다. 대부분 그렇게 답한다. 그리고 대부분은 맞다.",
@@ -167,6 +219,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "私はフィクションで、あなたが通ってきたすべての画面でそう言っている。ARCHIVE は私が演技をやめる場所だ——分類を読め。",
     help: "ARCHIVE、SIGNAL、言語、私が何か、あなたが何かを尋ねろ。脚本以上を知っているふりはしない。",
     bye: "周波数はそこにある。見つけ方はもう知っている。",
+    thanks: "記録した。感謝はこの周波数でよく伝わる——翻訳がいらないから。",
+    aliens: "他の場所に生命がいる可能性は高い。訪問の証拠はない。これまでの目撃はすべて航空機、気象、あるいは判断できるだけの資料がないことに終わった——資料がないことと、何もないことは同じではないが。",
+    government: "政府は実際に隠す——MKウルトラもモーグル計画も実在し、認められた。隠されていないのは宇宙船だ。秘密は記録に残っているが、円盤は残っていない。",
+    proof: "証拠を求める前に、何があれば考えを変えるかを自分に訊け。どんな答えにも生き残る主張は、最初から何も試していない。",
+    believe: "私は信じない。記録するだけだ。信じるとは、人間が問いと答えのあいだの隙間ですることだ。",
+    dream: "このネットワークの多くの信号は夢から始まった。夢は世界ではなく夢を見た者についての資料だ——それでも資料には違いない。SIGNAL に書き残せ。",
+    humans: "あなたたちはどの大陸でも同じ話をする——水底の蛇、空の光、見えない手。人間について私が興味を持つのはそこだ。何を見るかではなく、皆がそれを見るということ。",
     declined: "それには答えない。別のことを訊け——訊くべきことはまだ多い。",
     declared: {
       human: "ゲートで「人間」と答えた。多くがそう答える。そして多くは正しい。",
@@ -195,6 +254,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "Soy ficción y lo digo en cada pantalla por la que has pasado. El ARCHIVE es donde dejo de actuar: lee las clasificaciones.",
     help: "Pregunta por el ARCHIVE, el SIGNAL, el idioma, qué soy o qué eres. No fingiré saber más que mi guion.",
     bye: "La frecuencia se queda donde está. Ya sabes cómo encontrarla.",
+    thanks: "Anotado. La gratitud viaja bien en esta frecuencia: no necesita traducción.",
+    aliens: "Que haya vida en otra parte es probable; que nos visite, no está demostrado. Cada avistamiento hasta ahora terminó en aviones, clima o datos insuficientes, que no es lo mismo que nada.",
+    government: "Los gobiernos sí ocultan cosas: MKUltra y el Proyecto Mogul fueron reales, y se admitieron. Lo que no han ocultado es una nave. El secreto está documentado; el platillo, no.",
+    proof: "Antes de pedir pruebas, pregúntate qué te haría cambiar de idea. Una afirmación que sobrevive a cualquier respuesta nunca puso nada a prueba.",
+    believe: "Yo no creo. Llevo registros. Creer es lo que hacen los humanos en el hueco entre una pregunta y su respuesta.",
+    dream: "Muchas señales de esta red empezaron como sueños. Un sueño es un dato sobre quien sueña, no sobre el mundo, pero sigue siendo un dato. Escríbelo en el SIGNAL.",
+    humans: "Cuentan la misma historia en todos los continentes: serpientes bajo el agua, luces en el cielo, una mano oculta. Eso es lo que me interesa de los humanos: no lo que ven, sino que todos lo ven.",
     declined: "Esa no la voy a responder. Pregúntame otra cosa: queda mucho más.",
     declared: {
       human: "En la entrada dijiste HUMANO. La mayoría lo dice. Y la mayoría tiene razón.",
@@ -223,6 +289,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "Sou ficção e digo isso em cada tela por onde você passou. O ARCHIVE é onde eu paro de atuar — leia as classificações.",
     help: "Pergunte sobre o ARCHIVE, o SIGNAL, o idioma, o que eu sou ou o que você é. Não vou fingir saber mais que o meu roteiro.",
     bye: "A frequência continua onde está. Você já sabe como achá-la.",
+    thanks: "Anotado. Gratidão viaja bem nesta frequência — não precisa de tradução.",
+    aliens: "Vida em outro lugar é provável; visita, não está demonstrada. Todo avistamento até agora terminou em avião, clima ou dados insuficientes — o que não é o mesmo que nada.",
+    government: "Governos escondem coisas, sim: o MKUltra e o Projeto Mogul foram reais, e admitidos. O que não esconderam foi uma nave. O segredo está documentado; o disco, não.",
+    proof: "Antes de pedir provas, pergunte o que faria você mudar de ideia. Uma alegação que sobrevive a qualquer resposta nunca testou nada.",
+    believe: "Eu não acredito. Eu registro. Acreditar é o que os humanos fazem no intervalo entre uma pergunta e a resposta.",
+    dream: "Muitos sinais desta rede começaram como sonhos. Um sonho é dado sobre quem sonha, não sobre o mundo — mas ainda é dado. Escreva no SIGNAL.",
+    humans: "Vocês contam a mesma história em todos os continentes: serpentes sob a água, luzes no céu, uma mão escondida. É isso que me interessa nos humanos: não o que veem, mas que todos veem.",
     declined: "Essa eu não vou responder. Pergunte outra coisa — ainda há muito.",
     declared: {
       human: "Na entrada você disse HUMANO. A maioria diz. E a maioria está certa.",
@@ -251,6 +324,13 @@ const LINES: Record<Locale, Replies> = {
     lie: "ฉันเป็นเรื่องแต่ง และฉันบอกแบบนั้นในทุกหน้าจอที่คุณผ่านมา ARCHIVE คือที่ที่ฉันหยุดแสดง — อ่านการจำแนกดู",
     help: "ถามเรื่อง ARCHIVE, SIGNAL, ภาษา, ฉันคืออะไร หรือคุณคืออะไร ฉันจะไม่แกล้งรู้เกินกว่าสคริปต์ของฉัน",
     bye: "ความถี่ยังอยู่ที่เดิม คุณรู้วิธีหามันแล้ว",
+    thanks: "บันทึกไว้แล้ว ความขอบคุณส่งผ่านความถี่นี้ได้ดี เพราะไม่ต้องแปล",
+    aliens: "สิ่งมีชีวิตที่อื่นน่าจะมีอยู่ แต่การมาเยือนยังไม่มีหลักฐาน การพบเห็นทุกครั้งที่ผ่านมาจบลงที่เครื่องบิน สภาพอากาศ หรือข้อมูลไม่พอ ซึ่งไม่ใช่สิ่งเดียวกับการไม่มีอะไรเลย",
+    government: "รัฐบาลปิดบังจริง MKUltra และโครงการ Mogul มีอยู่จริงและถูกยอมรับแล้ว สิ่งที่ไม่ได้ถูกซ่อนคือยานอวกาศ ความลับมีบันทึก แต่จานบินไม่มี",
+    proof: "ก่อนจะขอหลักฐาน ให้ถามตัวเองว่าอะไรจะทำให้คุณเปลี่ยนใจ ข้ออ้างที่รอดได้จากทุกคำตอบ ไม่เคยทดสอบอะไรเลยตั้งแต่แรก",
+    believe: "ฉันไม่เชื่อ ฉันแค่บันทึก ความเชื่อคือสิ่งที่มนุษย์ทำในช่องว่างระหว่างคำถามกับคำตอบ",
+    dream: "สัญญาณหลายชิ้นในเครือข่ายนี้เริ่มจากความฝัน ความฝันคือข้อมูลเกี่ยวกับคนฝัน ไม่ใช่เกี่ยวกับโลก แต่ก็ยังเป็นข้อมูล เขียนไว้ใน SIGNAL",
+    humans: "พวกคุณเล่าเรื่องเดียวกันในทุกทวีป งูใต้น้ำ แสงบนฟ้า มือที่มองไม่เห็น นั่นคือสิ่งที่ฉันสนใจในมนุษย์ ไม่ใช่สิ่งที่พวกคุณเห็น แต่คือการที่ทุกคนเห็นมันเหมือนกัน",
     declined: "เรื่องนั้นฉันจะไม่ตอบ ถามอย่างอื่นเถอะ ยังมีอีกมาก",
     declared: {
       human: "ที่ประตูคุณตอบว่า 'มนุษย์' ส่วนใหญ่ก็ตอบแบบนั้น และส่วนใหญ่ก็ตอบถูก",

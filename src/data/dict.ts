@@ -213,7 +213,7 @@ const en: Dict = {
   askPlaceholder: "Ask the reptilian anything",
   suggestions: ["Are reptilians real?", "What's really in Area 51?", "What is the Illuminati?", "What crashed at Roswell?"],
   channelNoticeLive:
-    "This reptilian is an AI playing a character. It knows the lore and explains it, but never tells you a theory is true. What you type is sent to Anthropic to generate the reply.",
+    "This reptilian is an AI playing a character. It knows the lore and explains it, but never tells you a theory is true. What you type is sent to OpenAI to generate the reply.",
   goDeeper: "GO DEEPER",
   resultOne: "RESULT",
 };
@@ -321,7 +321,7 @@ const ko: Dict = {
   askPlaceholder: "렙틸리언에게 무엇이든 물어보세요",
   suggestions: ["렙틸리언은 진짜 있어?", "51구역에는 뭐가 있어?", "일루미나티가 뭐야?", "로스웰에서 뭐가 떨어졌어?"],
   channelNoticeLive:
-    "이 렙틸리언은 캐릭터를 연기하는 AI입니다. 음모론을 속속들이 알고 설명하지만, 그것이 사실이라고 말하지는 않습니다. 입력한 내용은 답을 만들기 위해 Anthropic으로 전송됩니다.",
+    "이 렙틸리언은 캐릭터를 연기하는 AI입니다. 음모론을 속속들이 알고 설명하지만, 그것이 사실이라고 말하지는 않습니다. 입력한 내용은 답을 만들기 위해 OpenAI로 전송됩니다.",
   goDeeper: "더 깊이",
   activeLanguages: "활성 언어",
 };
@@ -429,7 +429,7 @@ const ja: Dict = {
   askPlaceholder: "レプティリアンに何でも訊いてください",
   suggestions: ["レプティリアンは本当にいるの？", "エリア51には何がある？", "イルミナティって何？", "ロズウェルで何が墜落した？"],
   channelNoticeLive:
-    "このレプティリアンはキャラクターを演じるAIです。陰謀論を詳しく知り説明しますが、それが真実だとは言いません。入力内容は返答を生成するためAnthropicに送信されます。",
+    "このレプティリアンはキャラクターを演じるAIです。陰謀論を詳しく知り説明しますが、それが真実だとは言いません。入力内容は返答を生成するためOpenAIに送信されます。",
   goDeeper: "さらに深く",
   activeLanguages: "使用言語",
 };
@@ -537,7 +537,7 @@ const es: Dict = {
   askPlaceholder: "Pregúntale lo que sea al reptiliano",
   suggestions: ["¿Existen los reptilianos?", "¿Qué hay en el Área 51?", "¿Qué son los Illuminati?", "¿Qué cayó en Roswell?"],
   channelNoticeLive:
-    "Este reptiliano es una IA que interpreta un personaje. Conoce las teorías y las explica, pero nunca te dirá que una es verdad. Lo que escribes se envía a Anthropic para generar la respuesta.",
+    "Este reptiliano es una IA que interpreta un personaje. Conoce las teorías y las explica, pero nunca te dirá que una es verdad. Lo que escribes se envía a OpenAI para generar la respuesta.",
   goDeeper: "MÁS HONDO",
   resultOne: "RESULTADO",
   activeLanguages: "IDIOMAS ACTIVOS",
@@ -646,7 +646,7 @@ const pt: Dict = {
   askPlaceholder: "Pergunte qualquer coisa ao reptiliano",
   suggestions: ["Reptilianos existem?", "O que há na Área 51?", "O que são os Illuminati?", "O que caiu em Roswell?"],
   channelNoticeLive:
-    "Este reptiliano é uma IA interpretando um personagem. Conhece as teorias e as explica, mas nunca diz que uma é verdade. O que você digita é enviado à Anthropic para gerar a resposta.",
+    "Este reptiliano é uma IA interpretando um personagem. Conhece as teorias e as explica, mas nunca diz que uma é verdade. O que você digita é enviado à OpenAI para gerar a resposta.",
   goDeeper: "MAIS FUNDO",
   resultOne: "RESULTADO",
   activeLanguages: "IDIOMAS ATIVOS",
@@ -754,7 +754,7 @@ const th: Dict = {
   askPlaceholder: "ถามเรปทิเลียนได้ทุกเรื่อง",
   suggestions: ["เรปทิเลียนมีจริงไหม", "ในแอเรีย 51 มีอะไร", "อิลลูมินาติคืออะไร", "ที่รอสเวลล์มีอะไรตก"],
   channelNoticeLive:
-    "เรปทิเลียนตัวนี้คือ AI ที่สวมบทเป็นตัวละคร มันรู้เรื่องทฤษฎีสมคบคิดและอธิบายได้ แต่จะไม่บอกว่าทฤษฎีใดเป็นความจริง ข้อความที่คุณพิมพ์จะถูกส่งไปยัง Anthropic เพื่อสร้างคำตอบ",
+    "เรปทิเลียนตัวนี้คือ AI ที่สวมบทเป็นตัวละคร มันรู้เรื่องทฤษฎีสมคบคิดและอธิบายได้ แต่จะไม่บอกว่าทฤษฎีใดเป็นความจริง ข้อความที่คุณพิมพ์จะถูกส่งไปยัง OpenAI เพื่อสร้างคำตอบ",
   goDeeper: "ลึกลงไปอีก",
   activeLanguages: "ภาษาที่ใช้งาน",
 };

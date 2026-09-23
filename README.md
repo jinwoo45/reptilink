@@ -41,14 +41,16 @@ backend (§30) is out of scope for a single static deployment, so:
   a real provider means replacing the data source, not the UI.
 - **Signals you transmit stay in your browser session.** Nothing is persisted or
   sent anywhere.
-- **The reptilian is live only when the deployment has an API key.** With
-  `ANTHROPIC_API_KEY` set, `/api/entity` streams replies from Claude
-  (`claude-opus-5`, low effort, server-side refusal fallback), playing a
-  reptilian that knows conspiracy lore and never presents a theory as true
-  (`src/lib/entityPrompt.ts`). Without a key, or when the live link fails, the
-  local script answers instead — including every ARCHIVE topic, in every
-  language. Abuse limits in the route are per server instance; set a monthly
-  spend limit on the key.
+- **The reptilian is live only when the deployment has an OpenAI key.** With
+  `OPENAI_API_KEY` set, `/api/entity` streams replies from GPT through the
+  OpenAI Responses API, playing a reptilian that knows conspiracy lore and
+  never presents a theory as true (`src/lib/entityPrompt.ts`). The model
+  defaults to `gpt-5.4-mini`; set `OPENAI_MODEL` to change it, and
+  `OPENAI_REASONING_EFFORT` only for models that accept it. Conversations are
+  sent with `store: false`. Without a key, or when the live link fails, the
+  local script answers instead — every ARCHIVE topic plus a set of common
+  questions, in every language. Abuse limits in the route are per server
+  instance; set a monthly spend limit on the key.
 - **The local script is a script, not a language model.** It matches
   your message against a keyword table and answers from a fixed set of replies,
   all of which are in `src/data/entity.ts`. It runs entirely in your browser and
